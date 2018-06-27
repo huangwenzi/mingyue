@@ -12,10 +12,10 @@ class ActorMgr():
 
 	#初始化管理器
 	#nScreen : 场景
-	def __init__(self, nScreen, i_actorList, d_actorList):
+	def __init__(self, nScreen):
 		self.screen = nScreen
-		self.i_actorList = i_actorList
-		self.d_actorList = d_actorList
+		self.i_actorList = []
+		self.d_actorList = []
 		self.actorList = []
 
 	#添加队友角色

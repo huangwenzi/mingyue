@@ -6,9 +6,9 @@ import skill		#技能
 #自身属性
 class Self_attr() :
 	def __init__(self):
-		self.name = "小朋友阿五"	#名字
+		self.name = "阿五"	#名字
 		self.introduce = "null"		#介绍
-		self.location = "刺客"		#定位
+		self.location = "射手"		#定位
 	
 
 #可变属性	受被动技能影响

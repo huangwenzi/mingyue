@@ -16,6 +16,7 @@ from actor_8 import Actor as i_actor_8
 class share_attr() :		#角色共有属性，反正以后也记不得了
 	def __init__(self):
 		self.level = 1			#等级
+		self.exp = 0			#经验
 		self.pos_x = 0			#位置
 		self.pos_y = 0
 		self.team = None		#是否队友 i = 队友 d = 敌人
@@ -110,6 +111,7 @@ class Actor():
 		self.actor.attribute.defense += nLevel * self.actor.growUp.defense
 		self.actor.attribute.Violent += nLevel * self.actor.growUp.Violent
 		self.actor.attribute.speed += nLevel * self.actor.growUp.speed
+
 		#被动加成
 		for num in range(4):
 			if self.actor.skill[num].m_type == skill.skill_type.passivity :
@@ -141,4 +143,4 @@ class Actor():
 		hpX = self.actor.attribute.hp/self.actor.attribute.MaxHp	#计算生命值长度
 		pygame.draw.rect(self.screen, (0, 100, 0), (self.rect.centerx - 47, self.rect.bottom - 97, hpX * 84, 10), )#剩余生命值
 		hp_number = self.font.render('%.1f' % (self.actor.attribute.hp),True,(0,0,0))	#生命值数值
-		self.screen.blit(hp_number, (self.rect.centerx - 30, self.rect.bottom - 95))
+		self.screen.blit(hp_number, (self.rect.centerx - 30, self.rect.bottom - 100))

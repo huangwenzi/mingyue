@@ -58,10 +58,17 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="main.py" />
+    <Compile Include="save\save_actor.py" />
     <Compile Include="system\battle.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="system\battleMgr.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="system\dataMgr.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="system\screenMgr.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
@@ -70,6 +77,7 @@
     <Folder Include="entity\" />
     <Folder Include="config\" />
     <Folder Include="enum\" />
+    <Folder Include="save\" />
     <Folder Include="system\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
