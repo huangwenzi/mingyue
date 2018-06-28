@@ -2,8 +2,7 @@
 import pygame
 import sys
 import copy
-import skill 
-sys.path.append(".\config")
+sys.path.append("./config")
 from actor_1 import Actor as i_actor_1
 from actor_2 import Actor as i_actor_2
 from actor_3 import Actor as i_actor_3
@@ -12,6 +11,7 @@ from actor_5 import Actor as i_actor_5
 from actor_6 import Actor as i_actor_6
 from actor_7 import Actor as i_actor_7
 from actor_8 import Actor as i_actor_8
+import skill
 
 class share_attr() :		#角色共有属性，反正以后也记不得了
 	def __init__(self):
@@ -21,6 +21,7 @@ class share_attr() :		#角色共有属性，反正以后也记不得了
 		self.pos_y = 0
 		self.team = None		#是否队友 i = 队友 d = 敌人
 		self.actor_idx = 0		#角色的索引序列
+		self.list_index = 0		#列表的索引序列
 		self.team_idx = 0		#队伍的索引序列
 		self.state = 1			#当前状态 1：站立  2：战斗
 		self.image_idx = 0		#当前状态的图片索引
@@ -34,26 +35,17 @@ class share_attr() :		#角色共有属性，反正以后也记不得了
 actor_tab = [i_actor_1(), i_actor_2(), i_actor_3(), i_actor_4(), i_actor_5(), i_actor_6(), i_actor_7(), i_actor_8(),]
 
 class Actor():
-	#image_1 站立图片资源
-	#image_2 战斗图片资源
-	#rect			图片大小(100, 110)   bottom or centerx(位置)
-	#screen			场景
-	#screen_rect	场景大小
-	#font			字体
-	#name			显示的名字文本
-	
-
-	"""description of class"""
 	#初始化角色
 	#nIndex : 角色索引
 	#nScreen : 场景数据
-	#nTeam_idx : 队伍索引（列表索引）
+	#nTeam_idx : 队伍索引
 	#nTeam : ture=队友 false=敌人
-	def __init__(self, nIndex, nScreen, nTeam_idx, nTeam, nLevel):
+	#list_index : 列表里的索引
+	def __init__(self, nIndex, nScreen, nTeam_idx, nTeam, nLevel, list_index):
 		#角色与界面大小处理
 		actor = actor_tab[nIndex - 1]
 		self.actor = copy.deepcopy(actor)		#添加角色属性 用深拷贝，保持角色表的变量不受拷贝对象改变
-		self.actor.share_attr = share_attr()
+		self.actor.share_attr = share_attr()	#创建角色共有属性
 
 		str_image = "FineArts/actor/actor_%d/%s_%d_%d.png"#图片位置 :角色，队伍，状态
 		#站立图片资源
@@ -63,6 +55,7 @@ class Actor():
 		self.image_1[0] = pygame.transform.scale(self.image_1[0], (100, 110), )#(缩放)
 		self.actor.share_attr.actor_idx = nIndex
 		self.actor.share_attr.team_idx = nTeam_idx
+		self.actor.share_attr.list_index = list_index
 		self.actor.share_attr.team = nTeam
 		self.actor.share_attr.level = nLevel
 		self.actor.share_attr.now_image = self.image_1[0]
@@ -128,7 +121,7 @@ class Actor():
 		self.rect.centerx = self.actor.share_attr.pos_x
 		self.screen.blit(self.actor.share_attr.now_image, self.rect)
 
-		#绘制特效图片
+		#绘制身上的特效图片
 		if self.actor.share_attr.effect :
 			self.screen.blit(self.actor.share_attr.effect, self.rect)
 			self.actor.share_attr.effect_time -= 1

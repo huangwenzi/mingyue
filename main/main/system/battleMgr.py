@@ -2,14 +2,12 @@ import math		#数学
 import time		#时间
 import random	#随机数
 import sys
-sys.path.append(".\config")
+import copy
+sys.path.append("./config")
 import skill 
 
 class BattleMgr():
-	#i_actorList	队友列表
-	#d_actorList	敌人列表
 
-    
 	#初始化管理器
 	#nScreen : 场景
 	def __init__(self, i_actorList, d_actorList) :
@@ -18,7 +16,14 @@ class BattleMgr():
 
 
 	#战斗环节
+	#return: 1:战斗结束
 	def run(self):
+		#检查是否战斗结束
+		if len(self.i_actorList) == 0 or len(self.d_actorList) == 0:
+			self.d_actorList = []
+			self.i_actorList = []
+			return 1
+
 		now_time = time.time()	#现在时间
 		#己队遍历
 		for actor in self.i_actorList :
@@ -33,7 +38,7 @@ class BattleMgr():
 			if actor.actor.share_attr.do_time < now_time : 
 				self.find_target(actor, self.i_actorList)	#寻找最近目标
 				self.do_target(actor, actor.actor.share_attr.target)	#对目标操作
-
+		return 0
 
 	#寻找最近敌人
 	#nActor	: 角色

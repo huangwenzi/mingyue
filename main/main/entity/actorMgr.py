@@ -1,22 +1,18 @@
 import copy
 import sys
-sys.path.append(".\FineArts\actor")
+sys.path.append("./FineArts/actor")
 
 from actor import Actor
 
 class ActorMgr():
-	#screen			场景
-	#actorList		队友列表
-	#i_actorList	战斗队友列表
-	#d_actorList	战斗敌人列表
 
 	#初始化管理器
 	#nScreen : 场景
 	def __init__(self, nScreen):
-		self.screen = nScreen
-		self.i_actorList = []
-		self.d_actorList = []
-		self.actorList = []
+		self.screen = nScreen	#场景
+		self.i_actorList = []	# 战斗队友列表
+		self.d_actorList = []	# 敌人列表
+		self.actorList = []		# 队友列表
 
 	#添加队友角色
 	#index : 角色索引
@@ -26,10 +22,19 @@ class ActorMgr():
 		if nIndex == None:	#没有角色索引
 			return 1
 
-		addActor = Actor(nIndex, self.screen, nTeam_idx, "i", nLevel)
-		naddActor = Actor(nIndex, self.screen, nTeam_idx, "i", nLevel)
+		list_index = len(self.i_actorList)	#列表里的索引
+		addActor = Actor(nIndex, self.screen, nTeam_idx, "i", nLevel, list_index)
+		naddActor = Actor(nIndex, self.screen, nTeam_idx, "i", nLevel, list_index)
 		self.i_actorList.append(addActor)
 		self.actorList.append(naddActor)
+
+
+	#删除队友角色
+	#list_index:列表
+	def remove_Team(self, list_index):
+		self.i_actorList.remove(list_index)
+		self.actorList.remove(list_index)
+
 
 	#添加敌对角色
 	#index : 角色索引
@@ -39,8 +44,16 @@ class ActorMgr():
 		if nIndex == None:	#没有角色索引
 			return 1
 
-		addActor = Actor(nIndex, self.screen, nTeam_idx, "d", nLevel)
+		list_index = len(self.d_actorList)  # 列表里的索引
+		addActor = Actor(nIndex, self.screen, nTeam_idx, "d", nLevel, list_index)
 		self.d_actorList.append(addActor)
+
+
+	#删除敌对角色
+	#list_index:列表
+	def remove_Hostile(self, list_index):
+		self.d_actorList.remove(list_index)
+
 
 	#遍历绘画角色
 	def blitme(self):
