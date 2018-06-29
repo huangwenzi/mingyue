@@ -105,6 +105,7 @@ class ScreenMgr():
 
 	#绘制场景内容
 	def scren_blitem(self):
+		self.actorMgr.blitme()
 		self.parts_blitme()
 		self.show_blitem()
 
@@ -163,9 +164,17 @@ class ScreenMgr():
 					self.parts_index = self.partsCfg[self.parts_index][index][4]
 					# self.parts_now_image = self.parts_image[self.parts_index]
 					self.show = [-1, -1]	#清除信息绘制
-				#如果没有下一层，而是需要绘制点击的物品信息
-				elif self.partsCfg[self.parts_index][index][5] == 0:
+				#如果是需要绘制点击的物品信息
+				elif self.partsCfg[self.parts_index][index][4] == 0:
 					self.show = [self.parts_index, index]  #设置显示信息的部件索引和物品索引
+				#如果是执行对应的功能函数
+				elif self.partsCfg[self.parts_index][index][4] == -1:
+					#是否有触发执行函数
+					if self.parts_func[self.parts_index] == 0:
+						pass
+					else:
+						func = self.parts_func[self.parts_index]
+						func()
 			elif index == -1:
 				index = self.get_actor(position)
 				#如果角色点击有效
@@ -175,10 +184,7 @@ class ScreenMgr():
 					self.show = [0, index]
 
 			print(index)
-			#是否有触发执行函数
-			if self.parts_func[self.parts_index] != 0:
-				func = self.parts_func[self.parts_index]
-				func()
+			
 
 		#记录释放鼠标左键
 		else:

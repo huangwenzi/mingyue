@@ -24,9 +24,7 @@ class ActorMgr():
 
 		list_index = len(self.i_actorList)	#列表里的索引
 		addActor = Actor(nIndex, self.screen, nTeam_idx, "i", nLevel, list_index)
-		naddActor = Actor(nIndex, self.screen, nTeam_idx, "i", nLevel, list_index)
-		self.i_actorList.append(addActor)
-		self.actorList.append(naddActor)
+		self.actorList.append(addActor)
 
 
 	#删除队友角色

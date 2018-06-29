@@ -1,7 +1,7 @@
 import time
 import sys
 sys.path.append("config")	#配置地址
-sys.path.append("entity")	#实体地址
+sys.path.append("entity")	#实体对象地址
 sys.path.append("system")	#子系统地址
 sys.path.append("FineArts/screen")	#图片保存位置
 import pygame
@@ -22,19 +22,11 @@ def run_game():
 	battleMgr = BattleMgr(actorMgr.i_actorList, actorMgr.d_actorList)#战斗管理器
 	dataMgr = DataMgr()		#数据管理器
 
-	#添加 
-
 	#队友
 	actorMgr.addTeam(1, 1, 10)
 	actorMgr.addTeam(4, 2, 10)
 	actorMgr.addTeam(3, 3, 10)
 	actorMgr.addTeam(7, 7, 10)
-	
-	#敌人
-	#actorMgr.addHostile(8, 1, 10)
-	#actorMgr.addHostile(6, 2, 10)
-	#actorMgr.addHostile(2, 3, 10)
-	#actorMgr.addHostile(5, 7, 10)
 
 	#相关管理器连接
 	screenMgr.load_actorMgr(actorMgr)
@@ -49,14 +41,13 @@ def run_game():
 
 		#如果是在平时
 		if screenMgr.state == "normal":
-			actorMgr.blitme()					#人物绘画
-			screenMgr.event()					#鼠标事件
+			screenMgr.event()  					# 鼠标事件
 			screenMgr.scren_blitem()			#绘制场景内容
 		#在战斗时
 		elif screenMgr.state == "battle":
 			ret = battleMgr.run()				#战斗计算
 			#如果战斗结束了
-			if ret == 1:
+			if ret == 1 or ret == 2:	#具体战斗结果体现还待实现
 				screenMgr.state = "normal"
 			actorMgr.blitme()					#人物绘画
 
