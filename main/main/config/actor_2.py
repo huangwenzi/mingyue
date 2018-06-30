@@ -1,4 +1,4 @@
-#琪琪的角色属性
+#阿亮的角色属性
 
 import sys
 import skill
@@ -6,7 +6,7 @@ import skill
 #自身属性
 class Self_attr() :
 	def __init__(self):
-		self.name = "琪琪"			#名字
+		self.name = "阿亮"	#名字
 		self.introduce = "null"		#介绍
 		self.location = "法师"		#定位
 	
@@ -61,8 +61,8 @@ class Actor():
 		self.attribute = Attribute()		#可变属性
 		self.growUp = GrowUp()				#成长
 		self.skill = []						#技能
-		self.skill.append(skill.Despise())
-		self.skill.append(skill.Despise_rand())
-		self.skill.append(skill.Flirt())
-		self.skill.append(skill.Deadly_everyone())
+		self.skill.append(skill.Chaos_hit())
+		self.skill.append(skill.Accurate_hit())
+		self.skill.append(skill.Deny())
+		self.skill.append(skill.Double_Accurate_hit())
 		share_attr = None			#共有属性，角色创建时赋值

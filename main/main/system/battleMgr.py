@@ -5,7 +5,7 @@ import sys
 import copy
 sys.path.append("./config")
 
-from enum import enum  # 包含枚举
+from i_enum import enum  # 包含枚举
 
 class BattleMgr():
 

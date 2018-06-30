@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>606718ff-e233-4b92-b40c-a2379040395e</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>main.py</StartupFile>
+    <StartupFile>entity\actor.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,6 +21,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="config\actor_0.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="config\actor_1.py">
       <SubType>Code</SubType>
     </Compile>
@@ -42,7 +45,8 @@
     <Compile Include="config\actor_7.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="config\actor_8.py">
+    <Compile Include="config\config.py" />
+    <Compile Include="config\image.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="config\screen.py">
@@ -57,6 +61,12 @@
     <Compile Include="entity\actorMgr.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="enum\i_enum.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="enum\module1.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="main.py" />
     <Compile Include="save\save_actor.py" />
     <Compile Include="system\battle.py">
@@ -68,6 +78,7 @@
     <Compile Include="system\dataMgr.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="system\imageMgr.py" />
     <Compile Include="system\screenMgr.py">
       <SubType>Code</SubType>
     </Compile>

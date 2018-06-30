@@ -1,4 +1,4 @@
-#舍长的角色属性
+#娘炮的角色属性
 
 import sys
 import skill
@@ -6,30 +6,30 @@ import skill
 #自身属性
 class Self_attr() :
 	def __init__(self):
-		self.name = "舍长"	#名字
+		self.name = "娘炮"	#名字
 		self.introduce = "null"		#介绍
-		self.location = "肉盾"		#定位
+		self.location = "法师"		#定位
 	
 
 #可变属性	受被动技能影响
 class Attribute() :
 	def __init__(self):
-		self.MaxHp =  400			#最大生命值
-		self.hp =  400				#生命值
-		self.attack =  15			#攻击
-		self.defense =  30			#防御
+		self.MaxHp =  100			#最大生命值
+		self.hp =  100				#生命值
+		self.attack =  20			#攻击
+		self.defense =  0			#防御
 		self.Violent =  0			#暴击
 		self.speed =  0.4			#攻击速度
 		self.move =  10				#移动速度
-		self.attack_range =  100	#攻击范围
+		self.attack_range =  300	#攻击范围
 
 
 #成长
 class GrowUp() :
 	def __init__(self):
-		self.hp = 40				#生命值
-		self.attack = 1				#攻击
-		self.defense = 3			#防御
+		self.hp = 10				#生命值
+		self.attack = 2				#攻击
+		self.defense = 1			#防御
 		self.Violent = 0			#暴击
 		self.speed = -0.01			#攻击速度
 
@@ -61,8 +61,8 @@ class Actor():
 		self.attribute = Attribute()		#可变属性
 		self.growUp = GrowUp()				#成长
 		self.skill = []						#技能
-		self.skill.append(skill.Ordinary_knife())
-		self.skill.append(skill.Ordinary_force_knife())
-		self.skill.append(skill.Dormitory_head())
-		self.skill.append(skill.Drunk_knife())
+		self.skill.append(skill.Electric())
+		self.skill.append(skill.Electric_chain())
+		self.skill.append(skill.Knowledge())
+		self.skill.append(skill.Dark_matter())
 		share_attr = None			#共有属性，角色创建时赋值

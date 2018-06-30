@@ -1,4 +1,4 @@
-#阿晓的角色属性
+#老牛的角色属性
 
 import sys
 import skill
@@ -6,30 +6,30 @@ import skill
 #自身属性
 class Self_attr() :
 	def __init__(self):
-		self.name = "阿晓"			#名字
+		self.name = "老牛"	#名字
 		self.introduce = "null"		#介绍
-		self.location = "战士"		#定位
+		self.location = "肉盾"		#定位
 	
 
 #可变属性	受被动技能影响
 class Attribute() :
 	def __init__(self):
-		self.MaxHp =  200			#最大生命值
-		self.hp =  200				#生命值
-		self.attack =  15			#攻击
-		self.defense =  10			#防御
+		self.MaxHp =  400			#最大生命值
+		self.hp =  400				#生命值
+		self.attack =  10			#攻击
+		self.defense =  30			#防御
 		self.Violent =  0			#暴击
 		self.speed =  0.4			#攻击速度
 		self.move =  10				#移动速度
-		self.attack_range =  150	#攻击范围
+		self.attack_range =  100	#攻击范围
 
 
 #成长
 class GrowUp() :
 	def __init__(self):
-		self.hp = 20				#生命值
-		self.attack = 1.5			#攻击
-		self.defense = 2			#防御
+		self.hp = 40				#生命值
+		self.attack = 1				#攻击
+		self.defense = 3			#防御
 		self.Violent = 0			#暴击
 		self.speed = -0.01			#攻击速度
 
@@ -61,8 +61,8 @@ class Actor():
 		self.attribute = Attribute()		#可变属性
 		self.growUp = GrowUp()				#成长
 		self.skill = []						#技能
-		self.skill.append(skill.One_knife())
-		self.skill.append(skill.Force_knife())
-		self.skill.append(skill.Veteran())
-		self.skill.append(skill.All_knife())
+		self.skill.append(skill.MyselfHp_up())
+		self.skill.append(skill.TeamHp_up())
+		self.skill.append(skill.Sports_man())
+		self.skill.append(skill.AllHp_up())
 		share_attr = None			#共有属性，角色创建时赋值

@@ -27,6 +27,8 @@ class Actor():
     actor_space = 120       # 角色间的间隔
     x_aline = 50            # 校准
     y_aline = 300           
+    team = "i"              # 队友
+    enemy = "d"             # 敌人
 
 
 #总的配置

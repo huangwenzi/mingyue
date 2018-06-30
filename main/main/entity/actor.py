@@ -1,10 +1,13 @@
 
 #角色类
 import pygame
+pygame.init()
 import sys
 import copy
 import time
 sys.path.append("./config")
+sys.path.append("./enum")
+from actor_0 import Actor as i_actor_0
 from actor_1 import Actor as i_actor_1
 from actor_2 import Actor as i_actor_2
 from actor_3 import Actor as i_actor_3
@@ -12,8 +15,7 @@ from actor_4 import Actor as i_actor_4
 from actor_5 import Actor as i_actor_5
 from actor_6 import Actor as i_actor_6
 from actor_7 import Actor as i_actor_7
-from actor_8 import Actor as i_actor_8
-from enum import enum  # 包含枚举
+from module1 import enum	#包含枚举
 from config import config  # 包含配置
 
 class share_attr() :		#角色共有属性，反正以后也记不得了
@@ -26,7 +28,7 @@ class share_attr() :		#角色共有属性，反正以后也记不得了
 		self.actor_idx = 0		#角色的索引序列
 		self.list_index = 0		#列表的索引序列
 		self.team_idx = 0		#队伍的索引序列
-		self.state = enum.State.wait  # 当前状态 1：待命  2：战斗
+		self.state = enum.state.normal  # 当前状态 1：待命  2：战斗
 		self.image_idx = 0		#当前状态的图片索引
 		self.target = None		#目标敌人
 		self.now_image = None	#当前图片
@@ -35,7 +37,8 @@ class share_attr() :		#角色共有属性，反正以后也记不得了
 		self.do_time = 0		#可以动作的时间
 
 #存放角色表	(0是占位，用来索引对齐)
-actor_tab = [0, i_actor_1(), i_actor_2(), i_actor_3(), i_actor_4(), i_actor_5(), i_actor_6(), i_actor_7(), i_actor_8(),]
+actor_tab = [i_actor_0(), i_actor_1(), i_actor_2(), i_actor_3(), i_actor_4(), i_actor_5(), i_actor_6(), i_actor_7(), ]
+a =1
 
 class Actor():
 	#初始化角色
@@ -93,7 +96,7 @@ class Actor():
 		elif nTeam == config.actor.enemy :  # 敌人放在另一边
 			self.actor.share_attr.pos_x = nScreen.get_width() - nTeam_idx//config.actor.Max_col * config.actor.actor_space - config.actor.y_aline
 		self.rect.centerx = self.actor.share_attr.pos_x
-		self.actor.share_attr.state = enum.State.wait
+		self.actor.share_attr.state = enum.state.normal
 
 		#自身属性计算
 		#等级成长属性

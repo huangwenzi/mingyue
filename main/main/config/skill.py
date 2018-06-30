@@ -1,5 +1,6 @@
-
-from enum import enum #包含枚举
+import sys
+sys.path.append(".\enum")
+from i_enum import enum #包含枚举
 
 
 #一般 1是普通攻击 2是伤害技能 3是被动技能 4是大招
