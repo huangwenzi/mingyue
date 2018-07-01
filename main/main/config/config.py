@@ -30,6 +30,10 @@ class Actor():
     team = "i"              # 队友
     enemy = "d"             # 敌人
 
+#___________________________技能配置
+class Skill():
+    count = 4               # 每个角色的技能数量
+
 
 #总的配置
 class Config():
@@ -37,5 +41,6 @@ class Config():
     hp_bar = Hp_bar()               # 生命条
     font = Font()                   # 字体
     actor = Actor()                 # 角色
+    skill = Skill()                 # 技能
 
 config = Config()   #s实例化

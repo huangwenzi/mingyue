@@ -8,7 +8,7 @@ sys.path.append("system")	#子系统地址
 sys.path.append("enum")	#子系统地址
 sys.path.append("FineArts/screen")	#图片保存位置
 
-from config import config #包含枚举
+from config import config #包含配置
 from i_enum import enum #包含枚举
 from actorMgr import ActorMgr #角色管理器	
 from battleMgr import BattleMgr #战斗管理器

@@ -33,3 +33,5 @@ class ImageMgr():
             self.skill_image.append([])
             self.skill_image[id] = pygame.image.load(config[id][0])            # 加载图片
             self.skill_image[id] = pygame.transform.scale(self.skill_image[id], config[id][1])    # 缩放
+
+imageMgr = ImageMgr()  # 图片资源
