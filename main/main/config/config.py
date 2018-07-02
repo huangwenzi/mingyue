@@ -5,7 +5,8 @@ import pygame
 #_________________________图片配置
 #角色的图片
 class Actor_image():
-    actor_size = [100, 110]     # 角色的尺寸
+    actor_size = [100, 110] # 角色的尺寸
+    battle_count = 4        # 战斗图片帧数
 
 #生命条
 class Hp_bar():
@@ -15,7 +16,6 @@ class Hp_bar():
 
 #__________________________绘图配置
 #字体
-
 class Font():
     font = pygame.font.SysFont('SimHei', 16)# 字体
     font_color = (0, 0, 0)          # 字体颜色
@@ -27,12 +27,17 @@ class Actor():
     actor_space = 120       # 角色间的间隔
     x_aline = 50            # 校准
     y_aline = 300           
-    team = "i"              # 队友
-    enemy = "d"             # 敌人
+    move_time = 0.1         # 移动的间隔时间
+    attack_time = 0.2       # 攻击的时间间隔（额外添加的）
+    defense_coefficient = 1 # 防御系数
+    team = 0                # 队友
+    enemy = 1               # 敌人
+
 
 #___________________________技能配置
 class Skill():
     count = 4               # 每个角色的技能数量
+    image_time = 1          # 技能特效持续时间
 
 
 #总的配置

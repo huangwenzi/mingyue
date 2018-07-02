@@ -1,5 +1,5 @@
 import sys
-sys.path.append(".\enum")
+sys.path.append("./enum")
 from i_enum import enum #包含枚举
 
 
@@ -7,30 +7,42 @@ from i_enum import enum #包含枚举
 #使用者：阿五，
 class Claw_hit(): 
     def __init__(self):
-        self.name = "爪击"                    #技能名
-        self.index = 0                       #技能索引
-        self.explain = "普通的用爪勾一下"    #说明
-        self.minLevel = 1                    #使用等级
-        self.m_type = enum.skill_type.hurt        #技能类型
-        self.target = enum.skill_target.Enemy    #技能目标
-        self.first = enum.skill_first.front        #优先攻击
-        self.Number = 1                        #目标数量    #多人只能随机或全体
-        self.Multiple = 1                    #攻击倍率
-        self.pro = 50                        #释放概率
+        self.name = "爪击"                      # 技能名
+        self.index = 0                          # 技能索引
+        self.explain = "普通的用爪勾一下"        # 说明
+        self.minLevel = 1                       # 使用等级
+        self.m_type = enum.skill_type.hurt      # 技能类型
+        self.target = enum.skill_target.Enemy   # 技能目标
+        self.first = enum.skill_first.front     # 优先攻击
+        self.Number = 1                         # 目标数量
+        self.Multiple = 1                       # 攻击倍率
+        self.up_attr = [     # 被动加成属性
+            200, 200,        # 最大生命值, 生命值
+            25,    5,        # 攻击, 防御
+            20,    0,        # 暴击, 抗暴
+            0.4, 10,         # 攻击速度, 移动速度
+            150,             # 攻击范围
+        ]
 
 #使用者:阿五
 class Claw_poison() :
     def __init__(self):
-        self.name = "毒爪"                    #技能名
-        self.index = 1                       #技能索引
-        self.explain = "爪里有毒"            #说明
-        self.minLevel = 1                    #使用等级
-        self.m_type = enum.skill_type.hurt        #技能类型
-        self.target = enum.skill_target.Enemy    #技能目标
-        self.first = enum.skill_first.front        #优先攻击
-        self.Number = 1                        #目标数量
-        self.Multiple = 2                    #攻击倍率
-        self.attr = [0, 0, 1, 1, 1, 0, 0, 0]          # 根据属性类型枚举
+        self.name = "毒爪"                      # 技能名
+        self.index = 1                          # 技能索引
+        self.explain = "爪里有毒"               # 说明
+        self.minLevel = 1                       # 使用等级
+        self.m_type = enum.skill_type.hurt      # 技能类型
+        self.target = enum.skill_target.Enemy   # 技能目标
+        self.first = enum.skill_first.front     # 优先攻击
+        self.Number = 1                         # 目标数量
+        self.Multiple = 2                       # 攻击倍率
+        self.up_attr = [     # 被动加成属性
+            200, 200,        # 最大生命值, 生命值
+            25,    5,        # 攻击, 防御
+            20,    0,        # 暴击, 抗暴
+            0.4, 10,         # 攻击速度, 移动速度
+            150,             # 攻击范围
+        ]
 
 #使用者:阿五
 class Insight_up() :
@@ -44,7 +56,7 @@ class Insight_up() :
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
+        self.up_attr = [        # 被动加成属性
             200, 200,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴
@@ -103,7 +115,7 @@ class Flirt() :
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
+        self.up_attr = [        # 被动加成属性
             200, 200,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴
@@ -162,7 +174,7 @@ class Deny() :
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
+        self.up_attr = [        # 被动加成属性
             200, 200,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴
@@ -216,13 +228,15 @@ class Veteran () :
         self.index = 14                       #技能索引
         self.explain = "打架是个锻炼身体的好运动，你也要来一下吗 （整体属性提升）"    #说明
         self.minLevel = 1                    #使用等级
-        self.m_type = enum.skill_type.passivity    #技能类型
+        self.m_type = enum.skill_type.change_passivity  # 技能类型
         self.target = enum.skill_target.myself    #技能目标
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
-            200, 200,        # 最大生命值, 生命值
+        self.condition = enum.skill_condition.hp_down # 被动变化条件
+        self.buff_time = 1                  # buff持续时间
+        self.up_attr = [        # 被动加成属性
+            0, 0,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴
             0.4, 10,         # 攻击速度, 移动速度        
@@ -280,7 +294,7 @@ class Sports_man () :
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
+        self.up_attr = [        # 被动加成属性
             200, 200,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴
@@ -339,7 +353,7 @@ class Lead_halo () :
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
+        self.up_attr = [        # 被动加成属性
             200, 200,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴
@@ -398,7 +412,7 @@ class Dormitory_head () :
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
+        self.up_attr = [        # 被动加成属性
             200, 200,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴
@@ -457,7 +471,7 @@ class Knowledge () :
         self.first = enum.skill_first.front        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 1                    #攻击倍率
-        self.attr = [        # 被动加成属性
+        self.up_attr = [        # 被动加成属性
             200, 200,        # 最大生命值, 生命值
             25,    5,        # 攻击, 防御
             20,    0,        # 暴击, 抗暴

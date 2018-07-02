@@ -4,29 +4,29 @@ import sys
 import time  # 时间
 import pygame
 import copy
-sys.path.append("./FineArts/screen")	#场景图片
-sys.path.append("config")	#配置地址
+sys.path.append("./config")				# 配置地址
 import screen
 
 class ScreenMgr():
+	view_1 = 0		# 一级视图开启标志
 	
 	def __init__(self):
-		#部件配置总表
+		#视图配置总表
 		self.partsCfg = [screen.parts_0_Cfg, 
 						
 					]
 
-		#部件图片总表
+		#视图图片总表
 		self.parts_image = []	#parts_image[type][index]
 
-		#部件物品信息总表(未完成)
+		#视图物品信息总表(未完成)
 		self.item_list = []  	#item_list[type][index]
 
-		#部件触发的函数总表
+		#视图触发的函数总表
 		self.parts_func = [0]*20
 
 		self.screen = pygame.display.set_mode((720, 800))
-		self.parts_state = 1			#部件状态 （当前鼠标点击打开层次）
+		self.parts_state = 1			#视图状态 （当前鼠标点击打开层次）
 
 		#背景资源加载
 		self.black_image = {}
@@ -35,18 +35,18 @@ class ScreenMgr():
 		self.black_image["battle"] = pygame.image.load("FineArts/screen/战斗背景图.jpg")
 		self.black_image["normal"] = pygame.image.load("FineArts/screen/平时背景.jpg")  # 平时背景
 
-		#添加部件图片(添加最好按索引顺序)
+		#添加视图图片(添加最好按索引顺序)
 		self.add_prats(0, self.partsCfg[0])
 
-		#添加部件触发函数
+		#添加视图触发函数
 		self.parts_func[3] = self.enetr_battle	#进入战斗
 
 		#当前状态
 		self.click_flag = 0  #上次点击是否释放（避免运行速度过快，导致的多次点击）
 		self.state = "normal"		#normal:平时  battle:战斗
-		self.parts_index = 0		#当前部件索引
+		self.parts_index = 0		#当前视图索引
 		self.background = self.black_image[self.state]  # 当前背景图
-		self.parts_now_image = self.parts_image[self.parts_index]	#当前部件图片
+		self.parts_now_image = self.parts_image[self.parts_index]	#当前视图图片
 		self.show = [-1,-1]		#展示的信息  [0]:类型 0:角色信息 
 										#	[1]:索引
 
@@ -83,7 +83,7 @@ class ScreenMgr():
 		self.actor_image.remove(list_index)
 
 
-	#添加部件图片资源
+	#添加视图图片资源
 	def add_prats(self, index, cfg):
 		#如果没有能储存当前索引的列表
 		if index >= len(self.parts_image) :
@@ -110,7 +110,7 @@ class ScreenMgr():
 		self.show_blitem()
 
 
-	#绘制部件
+	#绘制视图
 	def parts_blitme(self):
 		for v in self.parts_now_image:
 			self.screen.blit(v[0], v[1])
@@ -144,7 +144,7 @@ class ScreenMgr():
 	def event(self):
 		pressde = pygame.mouse.get_pressed()	#获取鼠标按下信息
 		position = pygame.mouse.get_pos()		#获取鼠标位置
-		index = -1	#点击的部件索引
+		index = -1	#点击的视图索引
 		#鼠标点击左键
 		if pressde[0]:
 			#如果上次的点击还没放开
@@ -154,19 +154,19 @@ class ScreenMgr():
 			#设置点击标志
 			self.click_flag = 1
 			print(position)
-			#获取点击部件索引
+			#获取点击视图索引
 			index = self.get_parts(position)
 
-			#有部件的有效点击,设置当前需要绘制的图片资源
+			#有视图的有效点击,设置当前需要绘制的图片资源
 			if index >= 0:
-				#如果点击的部件还有一层部件
+				#如果点击的视图还有一层视图
 				if self.partsCfg[self.parts_index][index][4] > 0:
 					self.parts_index = self.partsCfg[self.parts_index][index][4]
 					# self.parts_now_image = self.parts_image[self.parts_index]
 					self.show = [-1, -1]	#清除信息绘制
 				#如果是需要绘制点击的物品信息
 				elif self.partsCfg[self.parts_index][index][4] == 0:
-					self.show = [self.parts_index, index]  #设置显示信息的部件索引和物品索引
+					self.show = [self.parts_index, index]  #设置显示信息的视图索引和物品索引
 				#如果是执行对应的功能函数
 				elif self.partsCfg[self.parts_index][index][4] == -1:
 					#是否有触发执行函数
@@ -191,12 +191,12 @@ class ScreenMgr():
 			self.click_flag = 0
 
 
-	#获取点击的部件
+	#获取点击的视图
 	#position ：鼠标位置
 	def get_parts(self, position):
 		count = len(self.parts_now_image)
 		index = -1 #点击的索引，为-1表示没有有效点击
-		parts_list = self.parts_now_image	#遍历的部件列表
+		parts_list = self.parts_now_image	#遍历的视图列表
 
 		#开始遍历点击区域
 		for i in range(0, count):
@@ -209,7 +209,7 @@ class ScreenMgr():
 				index = i
 				break
 
-		#返回索引，-1为没有选中部件
+		#返回索引，-1为没有选中视图
 		return index
 
 
@@ -218,7 +218,7 @@ class ScreenMgr():
 	def get_actor(self, position):
 		count = len(self.actor_image)
 		flag = -1  # 点击的索引，为-1表示没有有效点击
-		parts_list = self.actor_image  # 遍历的部件列表
+		parts_list = self.actor_image  # 遍历的视图列表
 
 		#开始遍历点击区域
 		for i in range(0, count):
@@ -231,7 +231,7 @@ class ScreenMgr():
 				flag = i
 				break
 
-		#返回索引，-1为没有选中部件
+		#返回索引，-1为没有选中视图
 		return flag
 
 	#进入战斗
