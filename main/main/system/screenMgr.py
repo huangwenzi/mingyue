@@ -5,115 +5,53 @@ import time  # 时间
 import pygame
 import copy
 sys.path.append("./config")				# 配置地址
-import screen
+sys.path.append("./enum")
+
+from i_enum import enum  	# 包含枚举
+from config import config  	# 包含枚举
+from imageMgr import imageMgr   # 图片管理器
+import image				# 图片的配置
 
 class ScreenMgr():
-	view_1 = 0		# 一级视图开启标志
-	
 	def __init__(self):
-		#视图配置总表
-		self.partsCfg = [screen.parts_0_Cfg, 
-						
-					]
-
-		#视图图片总表
-		self.parts_image = []	#parts_image[type][index]
-
-		#视图物品信息总表(未完成)
-		self.item_list = []  	#item_list[type][index]
-
-		#视图触发的函数总表
-		self.parts_func = [0]*20
-
-		self.screen = pygame.display.set_mode((720, 800))
-		self.parts_state = 1			#视图状态 （当前鼠标点击打开层次）
-
-		#背景资源加载
-		self.black_image = {}
-		#self.battle_bg = pygame.image.load("FineArts/screen/战斗背景图.jpg")	#战斗背景
-		#self.normal_bg = pygame.image.load("FineArts/screen/平时背景.jpg")		#平时背景
-		self.black_image["battle"] = pygame.image.load("FineArts/screen/战斗背景图.jpg")
-		self.black_image["normal"] = pygame.image.load("FineArts/screen/平时背景.jpg")  # 平时背景
-
-		#添加视图图片(添加最好按索引顺序)
-		self.add_prats(0, self.partsCfg[0])
-
-		#添加视图触发函数
-		self.parts_func[3] = self.enetr_battle	#进入战斗
-
-		#当前状态
-		self.click_flag = 0  #上次点击是否释放（避免运行速度过快，导致的多次点击）
-		self.state = "normal"		#normal:平时  battle:战斗
-		self.parts_index = 0		#当前视图索引
-		self.background = self.black_image[self.state]  # 当前背景图
-		self.parts_now_image = self.parts_image[self.parts_index]	#当前视图图片
-		self.show = [-1,-1]		#展示的信息  [0]:类型 0:角色信息 
-										#	[1]:索引
-
 		#相关管理器的引用
 		self.actorMgr = None
-	
+		# 基本设置
+		self.screen = pygame.display.set_mode(config.screen.screen_size)
+		self.view_1 = enum.image.view_main  # 一级视图 
+		self.view_2 = enum.image.view_close # 二级视图
+		
+		#当前状态
+		self.click_state = enum.input.click_open# 鼠标状态
+		self.state = enum.state.normal  		# 场景状态
+		self.bg_index = 0  						# 当前背景图索引
+
 
 	#添加角色管理器
 	def load_actorMgr(self,actorMgr):
 		self.actorMgr = actorMgr
-		self.load_actor()
-
-
-	#重新加载角色图片资源
-	def load_actor(self):
-		#设置角色列表信息
-		actor_list = self.actorMgr.actorList
-
-		#初始化存储角色图片资源的列表
-		number = len(actor_list)
-		self.actor_image = [0]*number
-
-		for i in range(0, number):
-			self.actor_image[i] = [
-				actor_list[i].image_1[0],  # 图片资源
-				[actor_list[i].actor.share_attr.pos_x, actor_list[i].actor.share_attr.pos_y],  # 图片位置
-				[100,110],	#图片缩放
-			]
-
-
-	#删除角色图片资源
-	#list_index:删除的列表索引
-	def remove_actor(self, list_index):
-		self.actor_image.remove(list_index)
-
-
-	#添加视图图片资源
-	def add_prats(self, index, cfg):
-		#如果没有能储存当前索引的列表
-		if index >= len(self.parts_image) :
-			for i in range(len(self.parts_image), index+1):
-				self.parts_image.append([])
-
-		#清空当前列表，重新加载
-		self.parts_image[index] = []
-		for v in cfg :
-			image = pygame.image.load(v[0])	#图片地址
-			image = pygame.transform.scale(image, v[1] )#(缩放)
-			self.parts_image[index].append([image, v[2] ,v[1]])#图片资源，位置, 缩放
-
-
-	#绘制背景
-	def black_blitme(self):
-		self.screen.blit(self.background, (0,0))
 
 
 	#绘制场景内容
-	def scren_blitem(self):
-		self.actorMgr.blitme()
-		self.parts_blitme()
-		self.show_blitem()
+	def blitme_screen(self):
+		self.screen.blit(imageMgr.screen_image[self.bg_index], (0,0))	# 背景绘制
+		self.actorMgr.blitme()		# 角色绘制
+		# 视图绘制
+		# 主视图
+		main_config = image.view_image[0]
+		for num in range(0, len(main_config)):
+			self.screen.blit(imageMgr.view_image[enum.image.view_main][num])
 
+		# 一级视图
+		# 如果没有打开的一级视图
+		if self.view_1 == enum.image.view_main or self.view_1 == enum.image.view_close:
+			return
 
-	#绘制视图
-	def parts_blitme(self):
-		for v in self.parts_now_image:
-			self.screen.blit(v[0], v[1])
+		if self.view_1 == enum.image.view_actor:	# 角色视图
+			break
+		elif self.view_1 == enum.image.view_bag:	# 背包
+			
+
 
 		
 	#绘制角色信息

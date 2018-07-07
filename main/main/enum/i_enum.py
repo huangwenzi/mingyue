@@ -1,14 +1,20 @@
 
 
 #______________________________事件使用
-#部件点击事件
+# 部件点击事件
 class Parts_event():
     next = 0    #可替换当前的部件索引
     show = 1    #展示信息
     func = 2    #执行对应的函数
 
+#_______________________________场景使用
+# 鼠标键盘
+class Input():
+    click_open = 0  # 鼠标放开
+    click_down = 1  # 鼠标按下
+
 #_______________________________技能使用
-#技能类型
+# 技能类型
 class Skill_type():
     hurt = 1            # 伤害型
     passivity = 2       # 永久被动型
@@ -52,7 +58,7 @@ class Attr_type():
     attack_range = 8  # 攻击范围
 
 # buff
-class buff_type(object):
+class Buff_type(object):
     one = 0        # 一次计算   （添加buff时对属性计算一次）
     heap = 1       # 叠加计算   （每个回合叠加一次）
 
@@ -66,6 +72,15 @@ class Image():
     # type图片类型
     icon = "icon"
     item = "item"
+
+    # 视图类型
+    view_close = -1     # 没有
+    view_main  = 0      # 主视图
+    view_actor = 1      # 角色
+    view_bag = 2        # 背包
+    view_battle = 3     # 战斗
+    view_formation = 4  # 阵型
+    view_sava = 5       # 保存
     
     # actor图片资源枚举
     # 队伍
@@ -75,14 +90,11 @@ class Image():
     wait = 0        # 待命
     battle = 1      # 战斗
 
-    skill = 0       # 技能
-
 #_______________________________角色
 class Actor():
     # 状态
     wait = 1        # 待命
     battle = 2      # 战斗
-    battle = 2      # 技能
 
     # 队伍
     team = 0        # 队友
@@ -97,6 +109,8 @@ class Actor():
 class Enum():
     #————————————事件使用
     parts_event = Parts_event()     # 部件点击事件
+    #____________场景
+    input = Input()                 # 输入
     #————————————技能使用
     skill_type = Skill_type()       # 技能类型
     skill_target = Skill_target()   # 技能目标

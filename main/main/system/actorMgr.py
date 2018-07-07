@@ -33,12 +33,14 @@ class ActorMgr():
             actor.share_attr.die = enum.actor.live
 
 
-    # 战斗结束时数据清除
+    # 战斗结束时初始化战斗属性
     def battle_end(self):
         for actor in self.actor_list:    # 遍历队友
-            actor.battle_attr = None
+            actor.battle_attr = copy.deepcopy(actor.self_attr)
+            actor.share_attr.die = enum.actor.live
         for actor in self.d_actor_list:  # 遍历敌人
-            actor.battle_attr = None
+            actor.battle_attr = copy.deepcopy(actor.self_attr)
+            actor.share_attr.die = enum.actor.live
                 
 
     # 添加队友角色

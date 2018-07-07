@@ -3,19 +3,23 @@ import pygame
 
 #配置
 #_________________________图片配置
-#角色的图片
+# 场景
+class Screen():
+    screen_size = [720, 800]# 场景尺寸
+
+# 角色的图片
 class Actor_image():
     actor_size = [100, 110] # 角色的尺寸
     battle_count = 4        # 战斗图片帧数
 
-#生命条
+# 生命条
 class Hp_bar():
     bar_color = (0, 100, 0) # 血条颜色
     width = 90              # 宽度
     height = 16             # 高度
 
 #__________________________绘图配置
-#字体
+# 字体
 class Font():
     font = pygame.font.SysFont('SimHei', 16)# 字体
     font_color = (0, 0, 0)          # 字体颜色
@@ -42,6 +46,7 @@ class Skill():
 
 #总的配置
 class Config():
+    screen = Screen()               # 场景
     actor_image = Actor_image()     # 图片配置
     hp_bar = Hp_bar()               # 生命条
     font = Font()                   # 字体

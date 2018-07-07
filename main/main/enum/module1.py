@@ -24,21 +24,20 @@ class Skill_target():
     myself = 1      # 自身
     team = 2        # 团队
     Enemy = 3       # 敌人
-    #everyone = 4    #不分敌我(暂不支持)
+    #everyone = 4   # 不分敌我(暂不支持)
 
 #优先攻击
 
 
 class Skill_first():
-    front = 1  # 最近
-    rand = 2  # 随机
-    hpHigh = 3  # 生命高
-    hpLow = 4  # 生命低
-    hurtHigh = 5  # 攻击高
-    speedHigh = 6  # 速度高
-    defenseHigh = 7  # 防御高
-    back = 8  # 最远
-    whole = 9  # 全体
+    front = 1       # 最近
+    rand = 2        # 随机
+    hp_high = 3     # 生命高
+    hp_low = 4      # 生命低
+    hurt_high = 5   # 攻击高
+    speed_high = 6  # 攻击速度高
+    back = 7        # 最远
+    whole = 8       # 全体
 
 # 被动变化条件
 
@@ -63,7 +62,7 @@ class Attr_type():
 # buff
 
 
-class buff_type(object):
+class Buff_type(object):
     one = 0        # 一次计算   （添加buff时对属性计算一次）
     heap = 1       # 叠加计算   （每个回合叠加一次）
 
@@ -82,6 +81,14 @@ class Image():
     icon = "icon"
     item = "item"
 
+    # 视图类型
+    view_main           # 主视图
+    view_actor = 1      # 角色
+    view_bag = 2        # 背包
+    view_battle = 3     # 战斗
+    view_formation = 4  # 阵型
+    view_sava = 5       # 保存
+
     # actor图片资源枚举
     # 队伍
     team = 0      # 队友
@@ -89,8 +96,6 @@ class Image():
     #状态
     wait = 0        # 待命
     battle = 1      # 战斗
-
-    skill = 0       # 技能
 
 #_______________________________角色
 
