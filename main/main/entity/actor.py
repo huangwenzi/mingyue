@@ -15,7 +15,7 @@ from actor_4 import Actor as i_actor_4
 from actor_5 import Actor as i_actor_5
 from actor_6 import Actor as i_actor_6
 from actor_7 import Actor as i_actor_7
-from module1 import enum    # 包含枚举
+from i_enum import enum    # 包含枚举
 from config import config   # 包含配置
 from skill import skill_tab # 包含技能表
 
@@ -27,7 +27,7 @@ class Share_attr() :        # 角色共有属性
         self.pos_y = 0
         self.team = None            # 是否队友 
         self.team_idx = 0           # 队伍的索引序列
-        self.state = enum.state.wait# 当前状态 
+        self.state = enum.state.normal# 当前状态 
         self.image_idx = 0          # 当前状态的图片索引
         self.target = None          # 目标敌人
         self.effect_index = None    # 身上的技能id
@@ -55,8 +55,9 @@ class Actor():
         self.self_attr = actor.self_attr        # 展示属性
         self.battle_attr = actor.battle_attr    # 战斗属性
         self.share_attr = Share_attr()          # 共有属性
-        self.growUp_attr = actor.growUp_attr    # 成长属性
+        self.growUp_attr = actor.growUp         # 成长属性
         self.buff = actor.buff                  # buff
+        self.screen = nScreen                   # 角色场景
         
         # 创建角色共有属性
         self.share_attr.team_idx = nTeam_idx
@@ -65,17 +66,19 @@ class Actor():
 
         # 计算属性
         self.recount_attr()
+        self.battle_attr = copy.deepcopy(self.self_attr)
 
         # 名字
-        self.name = config.font.font.render(self.self_attr.name, True, config.font.font_color)
+        self.show_name = config.font.font.render(self.name, True, config.font.font_color)
 
         # 位置设置
-        self.share_attr.pos_y = nTeam_idx%config.Max_row * config.actor_space + config.y_aline    #五个一行  再加上一点点位置校准
-        if nTeam == config.team :
-            self.share_attr.pos_x = nTeam_idx//config.Max_col * config.actor_space + config.y_aline    # 加一点微调
-        elif nTeam == config.enemy :  # 敌人放在另一边
-            self.share_attr.pos_x = nScreen.get_width() - nTeam_idx//config.Max_col * config.actor_space - config.y_aline
+        self.share_attr.pos_y = nTeam_idx%config.actor.Max_row * config.actor.actor_space + config.actor.y_aline    #五个一行  再加上一点点位置校准
+        if nTeam == config.actor.team :
+            self.share_attr.pos_x = nTeam_idx//config.actor.Max_col * config.actor.actor_space + config.actor.x_aline    # 加一点微调
+        elif nTeam == config.actor.enemy :  # 敌人放在另一边
+            self.share_attr.pos_x = nScreen.get_width() - nTeam_idx//config.actor.Max_col * config.actor.actor_space - config.actor.x_aline
         self.share_attr.state = enum.state.normal
+
 
         
     # 重新计算属性

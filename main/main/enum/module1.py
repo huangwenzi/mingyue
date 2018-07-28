@@ -82,7 +82,7 @@ class Image():
     item = "item"
 
     # 视图类型
-    view_main           # 主视图
+    view_main = 0       # 主视图
     view_actor = 1      # 角色
     view_bag = 2        # 背包
     view_battle = 3     # 战斗

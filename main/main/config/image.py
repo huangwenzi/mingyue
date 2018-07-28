@@ -229,11 +229,11 @@ screen_image = [
 # 图片索引[类型，id]，缩放[宽，高], 绘制位置[x,y], 视图名, 视图索引(为-1表示没有下一视图)
 view_image = [
     [   # 0 : 主界面
-	    ["./FineArts/parts/角色.png", [100, 100], [0, 0],   "角色", enum.image.view_actor],
-	    ["./FineArts/parts/背包.png", [100, 100], [100, 0], "背包", enum.image.view_bag],
-	    ["./FineArts/parts/战斗.png", [100, 100], [200, 0], "战斗", enum.image.view_battle],
-	    ["./FineArts/parts/阵型.png", [100, 100], [300, 0], "阵型", enum.image.view_formation],
-	    ["./FineArts/parts/保存.png", [100, 100], [400, 0], "保存", enum.image.view_sava],
+	    ["FineArts/parts/角色.png", [100, 100], [0, 0],   "角色", enum.image.view_actor],
+	    ["FineArts/parts/背包.png", [100, 100], [100, 0], "背包", enum.image.view_bag],
+	    ["FineArts/parts/战斗.png", [100, 100], [200, 0], "战斗", enum.image.view_battle],
+	    ["FineArts/parts/阵型.png", [100, 100], [300, 0], "阵型", enum.image.view_formation],
+	    ["FineArts/parts/保存.png", [100, 100], [400, 0], "保存", enum.image.view_sava],
     ],
 
     # [   # 1 : 角色

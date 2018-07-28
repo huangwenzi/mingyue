@@ -92,7 +92,7 @@ class ActorMgr():
     def blitem_actor(self, actor):
         # 加载当前图片资源
         team = actor.share_attr.team            # 队伍
-        actor_id = actor.share_attr.actor_idx   # 角色id
+        actor_id = actor.index   # 角色id
         state = actor.share_attr.state          # 当前状态
         image_idx = actor.share_attr.image_idx  # 当前状态图片索引
         now_image = imageMgr.actor_image[team][actor_id][state][image_idx]# 当前绘制的图片资源
@@ -105,19 +105,20 @@ class ActorMgr():
 
         #绘制身上的特效图片
         now_time = time.time()
-        if actor.share_attr.effect:
-            actor.screen.blit(actor.share_attr.effect, actor.rect)
+        if actor.share_attr.effect_index:
+            actor.screen.blit(imageMgr.skill_image[actor.share_attr.effect_index], actor.rect)
             if actor.share_attr.effect_time <= now_time:
-                actor.share_attr.effect = None
+                actor.share_attr.effect_index = None
 
         #绘制名字
-        actor.screen.blit(actor.name, (actor.rect.centerx - 50, actor.rect.bottom - 115))
+        actor.screen.blit(actor.show_name, (actor.rect.centerx - 50, actor.rect.bottom - 115))
 
         #绘制生命框
-        pygame.draw.rect(actor.screen, config.font.font_color, (actor.rect.centerx - 50, actor.rect.bottom - 100, config.hpBar.left, config.hpBar.height), 3)#生命条外框
-        hpX = actor.actor_attr.hp/actor.actor_attr.MaxHp    #计算生命值长度
+        tmp_enum = enum.attr_type  # 属性枚举
+        pygame.draw.rect(actor.screen, config.font.font_color, (actor.rect.centerx - 50, actor.rect.bottom - 100, config.hp_bar.width, config.hp_bar.height), 3)#生命条外框
+        hpX = actor.battle_attr[tmp_enum.hp]/actor.battle_attr[tmp_enum.MaxHp]    #计算生命值长度
         pygame.draw.rect(actor.screen, config.hp_bar.bar_color, (actor.rect.centerx - 47, actor.rect.bottom - 97, hpX * 84, 10), )#剩余生命值
-        hp_number = config.font.font.render('%.1f' % (actor.actor_attr.hp), True, config.font.font_color)  # 生命值数值
+        hp_number = config.font.font.render('%.1f' % (actor.battle_attr[tmp_enum.hp]), True, config.font.font_color)  # 生命值数值
         actor.screen.blit(hp_number, (actor.rect.centerx - 30, actor.rect.bottom - 100))
 
 

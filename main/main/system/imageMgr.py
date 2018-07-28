@@ -20,11 +20,10 @@ class ImageMgr():
                 for state in range(0,len(config[team][actor_index])): # 状态
                     self.actor_image[team][actor_index].append([])
                     for index in range(0,len(config[team][actor_index][state])): # 索引
-                        self.actor_image[team][actor_index][state].append([])
                         tmp_config = config[team][actor_index][state][index]            # 当前配置
-                        tmp_image = self.actor_image[team][actor_index][state][index]   # 加载位置
                         tmp_image = pygame.image.load(tmp_config[0])                    # 加载图片
                         tmp_image = pygame.transform.scale(tmp_image, tmp_config[1])    # 缩放
+                        self.actor_image[team][actor_index][state].append(tmp_image)    # 添加
         
         # 加载技能图片资源
         config = image.skill_image
@@ -46,10 +45,10 @@ class ImageMgr():
         for view_index in range(0, len(image.view_image)):
             self.view_image.append([])
             for image_index in range(0, len(image.view_image[view_index])):
-                tmp_config = image.view_image[image_index]          # 图片配置
+                tmp_config = image.view_image[view_index][image_index]# 图片配置
                 tmp_image = pygame.image.load(tmp_config[0])        # 加载图片
                 tmp_image = pygame.transform.scale(tmp_image, tmp_config[1])  # 缩放
-                self.view_image[image_index] = tmp_image            
+                self.view_image[view_index].append(tmp_image)            
 
 
 

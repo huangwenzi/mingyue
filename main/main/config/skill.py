@@ -73,7 +73,7 @@ class Deadly_blow() :
         self.minLevel = 1                    #使用等级
         self.m_type = enum.skill_type.hurt        #技能类型
         self.target = enum.skill_target.Enemy    #技能目标
-        self.first = enum.skill_first.hurtHigh    #优先攻击
+        self.first = enum.skill_first.hurt_high    #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 3                    #攻击倍率
 
@@ -158,7 +158,7 @@ class Accurate_hit() :
         self.minLevel = 1                    #使用等级
         self.m_type = enum.skill_type.hurt        #技能类型
         self.target = enum.skill_target.Enemy    #技能目标
-        self.first = enum.skill_first.hpLow        #优先攻击
+        self.first = enum.skill_first.hp_low        #优先攻击
         self.Number = 1                        #目标数量
         self.Multiple = 2                    #攻击倍率
 
@@ -191,7 +191,7 @@ class Double_Accurate_hit() :
         self.minLevel = 1                    #使用等级
         self.m_type = enum.skill_type.hurt        #技能类型
         self.target = enum.skill_target.Enemy    #技能目标
-        self.first = enum.skill_first.hpLow        #优先攻击
+        self.first = enum.skill_first.hp_low        #优先攻击
         self.Number = 2                        #目标数量
         self.Multiple = 2                    #攻击倍率
 

@@ -40,7 +40,7 @@ class ScreenMgr():
 		# 主视图
 		main_config = image.view_image[0]
 		for num in range(0, len(main_config)):
-			self.screen.blit(imageMgr.view_image[enum.image.view_main][num])
+			self.screen.blit(imageMgr.view_image[enum.image.view_main][num], image.view_image[enum.image.view_main][num][2])
 
 		# 一级视图
 		# 如果没有打开的一级视图
@@ -48,9 +48,9 @@ class ScreenMgr():
 			return
 
 		if self.view_1 == enum.image.view_actor:	# 角色视图
-			break
+			pass
 		elif self.view_1 == enum.image.view_bag:	# 背包
-			
+			pass
 
 
 		

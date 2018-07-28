@@ -45,7 +45,7 @@ def run_game():
                 sys.exit()
 
 		#重绘屏幕
-        screenMgr.black_blitme()				# 绘制背景图
+        screenMgr.blitme_screen()				# 绘制背景图
 
 		#如果是在平时
         if screenMgr.state == "normal":

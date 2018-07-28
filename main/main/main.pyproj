@@ -49,9 +49,6 @@
     <Compile Include="config\image.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="config\screen.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="config\skill.py">
       <SubType>Code</SubType>
     </Compile>
