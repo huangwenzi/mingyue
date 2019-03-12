@@ -18,7 +18,7 @@ class ScreenMgr():
 		self.actorMgr = None
 		# 基本设置
 		self.screen = pygame.display.set_mode(config.screen.screen_size)
-		self.view_1 = enum.image.view_main  # 一级视图 
+		self.view_1 = enum.image.view_main  # 一级视图
 		self.view_2 = enum.image.view_close # 二级视图
 		
 		#当前状态
