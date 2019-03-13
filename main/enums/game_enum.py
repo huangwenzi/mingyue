@@ -14,6 +14,10 @@ class Mouse():
     click_down = 1  # 鼠标按下
     click_open = 2  # 鼠标放开
 
+# 图像类型
+class Iamge_type():
+    button = 0      # 按钮
+
 #_______________________________技能使用
 # 技能类型
 class Skill_type():
@@ -92,6 +96,14 @@ class Image():
     battle = 1      # 战斗
 
 #_______________________________角色
+# 定位
+class Location():
+    adc = 0         # 射手
+    ad = 1          # 战士
+    ap = 2          # 法师
+    tank = 3        # 坦克
+    fz = 4          # 辅助
+    ass = 5         # 刺客
 class Actor():
     # 状态
     wait = 1        # 待命
@@ -112,6 +124,7 @@ class Game_enum():
     parts_event = Parts_event()     # 部件点击事件
     #____________场景
     mouse = Mouse()                 # 输入
+    iamge_type = Iamge_type()       # 图像类型
     #————————————技能使用
     skill_type = Skill_type()       # 技能类型
     skill_target = Skill_target()   # 技能目标
@@ -123,6 +136,7 @@ class Game_enum():
     #____________图片
     image = Image()
     #____________角色
+    location = Location()           # 定位
     actor = Actor()                 #角色枚举
 
 
