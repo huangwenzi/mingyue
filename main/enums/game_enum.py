@@ -9,9 +9,10 @@ class Parts_event():
 
 #_______________________________场景使用
 # 鼠标键盘
-class Input():
-    click_open = 0  # 鼠标放开
+class Mouse():
+    click_free = 0  # 鼠标空闲
     click_down = 1  # 鼠标按下
+    click_open = 2  # 鼠标放开
 
 #_______________________________技能使用
 # 技能类型
@@ -106,11 +107,11 @@ class Actor():
     
 
 #所有的枚举放这里
-class Enum():
+class Game_enum():
     #————————————事件使用
     parts_event = Parts_event()     # 部件点击事件
     #____________场景
-    input = Input()                 # 输入
+    mouse = Mouse()                 # 输入
     #————————————技能使用
     skill_type = Skill_type()       # 技能类型
     skill_target = Skill_target()   # 技能目标
@@ -125,5 +126,5 @@ class Enum():
     actor = Actor()                 #角色枚举
 
 
-enum = Enum()   # 实例化枚举
+game_enum = Game_enum()   # 实例化枚举
 
