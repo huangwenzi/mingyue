@@ -45,4 +45,4 @@ class Image():
                 if ret == True:
                     return True,obj
             return True,self
-        return False
+        return False,self
