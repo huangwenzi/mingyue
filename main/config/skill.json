@@ -1,14 +1,14 @@
 {
     "0":{
         "id":0,
-        "name":0,
-        "explain":0,
-        "minLevel":0,
-        "m_type":0,
-        "target":0,
-        "first":0,
-        "number":0,
-        "multiple":"0|0|0|"
+        "name":"爪击",
+        "explain":"普通的用爪勾一下",
+        "minLevel":1,
+        "m_type":"hurt",
+        "target":"Enemy",
+        "first":"front",
+        "number":1,
+        "multiple":"0|2|0|0|0|0|0|0|0|0"
     },
     "1":{
         "id":1,

@@ -20,7 +20,7 @@ id:id
 name:名字
 explain:说明
 minLevel:最小激活等级
-m_type:类型
+m_type:伤害类型
 target:作用目标
 first:优先作用对象
 number:作用数量
