@@ -16,15 +16,16 @@ class Mouse():
 
 # 图像类型
 class Iamge_type():
-    button = 0      # 按钮
+    button = 0      # 按钮(点击有对应的功能)
 
 #_______________________________技能使用
 # 技能类型
 class Skill_type():
-    hurt = 1            # 伤害型
-    passivity = 2       # 永久被动型
-    change_passivity = 3# 变动被动型
-    curse = 4           # 增减益型
+    hurt = 1            # 伤害型(直接造成伤害)
+    passivity = 2       # 永久被动型(一直提升属性)
+    change_passivity = 3# 变动被动型(根据当前属性修改参数)
+    curse = 4           # 增减益型(添加属性，不可叠加)
+    curse_add = 5       # 增减益型(添加属性，可叠加)
 
 #技能目标
 class Skill_target():
