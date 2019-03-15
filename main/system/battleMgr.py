@@ -12,3 +12,9 @@ class BattleMgr():
     def __init__(self):
         self.myself_actor = []      # 自己的角色
         self.match_actop = []       # 对手的角色
+
+        # 载入角色
+        self.myself_actor.append()
+
+
+    
