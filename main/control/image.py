@@ -32,15 +32,22 @@ class Image():
 
     # 添加一个窗口
     # 统一以parent为绘制窗口
-    def add_image(self, path, name, tmp_type):
+    def add_image(self, path, name, postion, tmp_type, callback):
+        # 添加图像到列表
         tmp_image = Image(self.parent, path, name, tmp_type)
+        tmp_image.x = postion[0]
+        tmp_image.y = postion[1]
         self.image_list.append(tmp_image)
+        self.parent.image_callback[name] = callback
 
     # 获取点击的图像
     def get_click_image(self, postion):
         # 循环反复调用查找子级
         if self.x < postion.x and (self.x + self.width) > postion.x and self.y < postion.y and (self.y + self.height) > postion.y:
-            for tmp_image in self.image_list:
+            # 查找点击到的图像,从后面开始找
+            list_len = len(self.image_list)
+            for idx in range(0, list_len):
+                tmp_image = self.image_list[list_len - idx - 1]
                 ret,obj = tmp_image.get_click_image(postion)
                 if ret == True:
                     return True,obj
