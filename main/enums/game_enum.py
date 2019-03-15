@@ -26,6 +26,7 @@ class Skill_type():
     change_passivity = 3# 变动被动型(根据当前属性修改参数)
     curse = 4           # 增减益型(添加属性，不可叠加)
     curse_add = 5       # 增减益型(添加属性，可叠加)
+    Continued = 6       # 持续型(添加属性，不可叠加，每个攻击间隔添加)
 
 #技能目标
 class Skill_target():
@@ -34,7 +35,7 @@ class Skill_target():
     Enemy = 3       # 敌人
     #everyone = 4   # 不分敌我(暂不支持)
 
-#优先攻击
+#优先作用目标
 class Skill_first():
     front = 1       # 最近
     rand = 2        # 随机
@@ -53,15 +54,16 @@ class Skill_condition(object):
 #_______________________________属性使用
 #属性类型
 class Attr_type():
-    MaxHp =     0  # 最大生命值
     hp =        1  # 生命值
     attack =    2  # 攻击
-    defense =   3  # 防御
-    violent =   4  # 暴击
-    antiriot =  5  # 抗暴
-    speed =     6  # 攻击速度
-    move =      7  # 移动速度
-    attack_range = 8  # 攻击范围
+    attack_def =3  # 防御
+    magic =     4  # 法功
+    magic_def = 5  # 法防
+    violent =   6  # 暴击
+    antiriot =  7  # 抗暴
+    speed =     8  # 攻击速度
+    move =      9  # 移动速度
+    attack_range = 10  # 攻击范围
 
 # buff
 class Buff_type(object):
