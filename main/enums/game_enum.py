@@ -54,16 +54,16 @@ class Skill_condition(object):
 #_______________________________属性使用
 #属性类型
 class Attr_type():
-    hp =        1  # 生命值
-    attack =    2  # 攻击
-    attack_def =3  # 防御
-    magic =     4  # 法功
-    magic_def = 5  # 法防
-    violent =   6  # 暴击
-    antiriot =  7  # 抗暴
-    speed =     8  # 攻击速度
-    move =      9  # 移动速度
-    attack_range = 10  # 攻击范围
+    hp =        0  # 生命值
+    attack =    1  # 攻击
+    attack_def =2  # 防御
+    magic =     3  # 法功
+    magic_def = 4  # 法防
+    violent =   5  # 暴击
+    antiriot =  6  # 抗暴
+    speed =     7  # 攻击速度
+    move =      8  # 移动速度
+    attack_range = 9  # 攻击范围
 
 # buff
 class Buff_type(object):
