@@ -31,6 +31,7 @@ class ImageMgr():
         self.y = 0
         self.state = game_enum.state.normal  # 当前场景状态
 
+
         # 管理器
         self.mouse = Mouse()    # 鼠标事件管理器
         self.battleMgr = BattleMgr()  # 战斗场景管理器
@@ -98,6 +99,74 @@ class ImageMgr():
         self.normal_image_list.append(tmp_image)
         self.image_callback[name] = callback
 
+    # 加载战斗中需要用到的角色资源
+    def load_battle_image(self):
+        self.battle_image_list = []
+        battle_image_list = self.battle_image_list
+        actor_path = "FineArts/actor"
+        # 加载己方的资源
+        myself_actor = self.battleMgr.myself_actor
+        for tmp_actor in myself_actor:
+            # 加载站立资源
+            id_str = "actor_" + str(tmp_actor.id)
+            action_str = "i_stand"
+            actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
+            image_name = id_str + action_str
+            tmp_image = Image(self, actor_path_str, image_name, "actor", [0,0])
+            battle_image_list[image_name] = tmp_image
+            # 加载攻击资源
+            id_str = "actor_" + str(tmp_actor.id)
+            action_str = "i_0"
+            actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
+            image_name = id_str + action_str
+            tmp_image = Image(self, actor_path_str, image_name, "actor", [0,0])
+            battle_image_list[image_name] = tmp_image
+            id_str = "actor_" + str(tmp_actor.id)
+            action_str = "i_1"
+            actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
+            image_name = id_str + action_str
+            tmp_image = Image(self, actor_path_str, image_name, "actor", [0,0])
+            battle_image_list[image_name] = tmp_image
+            # 加载要用到的技能资源
+            skill_path = "FineArts/skill"
+            skill = tmp_actor.skill
+            for tmp_skill in skill:
+                id_str = "skill_" + str(tmp_skill.id)
+                skill_path_str = skill_path + "/" + id_str + ".png"
+                tmp_image = Image(self, skill_path_str, id_str, "skill", [0,0])
+                battle_image_list[id_str] = tmp_image
+        # 加载对手的资源
+        match_actor = self.battleMgr.match_actor
+        for tmp_actor in match_actor:
+            # 加载站立资源
+            id_str = "actor_" + str(tmp_actor.id)
+            action_str = "d_stand"
+            actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
+            image_name = id_str + action_str
+            tmp_image = Image(self, actor_path_str, image_name, "actor", [0,0])
+            battle_image_list[image_name] = tmp_image
+            # 加载攻击资源
+            id_str = "actor_" + str(tmp_actor.id)
+            action_str = "d_0"
+            actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
+            image_name = id_str + action_str
+            tmp_image = Image(self, actor_path_str, image_name, "actor", [0,0])
+            battle_image_list[image_name] = tmp_image
+            id_str = "actor_" + str(tmp_actor.id)
+            action_str = "d_1"
+            actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
+            image_name = id_str + action_str
+            tmp_image = Image(self, actor_path_str, image_name, "actor", [0,0])
+            battle_image_list[image_name] = tmp_image
+            # 加载要用到的技能资源
+            skill_path = "FineArts/skill"
+            skill = tmp_actor.skill
+            for tmp_skill in skill:
+                id_str = "skill_" + str(tmp_skill.id)
+                skill_path_str = skill_path + "/" + id_str + ".png"
+                tmp_image = Image(self, skill_path_str, id_str, "skill", [0,0])
+                battle_image_list[id_str] = tmp_image
+
     # 战斗按钮的回调
     def fight_callback(self):
         print("fight_callback")
@@ -107,7 +176,7 @@ class ImageMgr():
         enemy_arr = [{"id":4,"lv":10},{"id":5,"lv":10},{"id":6,"lv":10},{"id":7,"lv":10}]
         self.battleMgr.set_enemy(enemy_arr)
         # 加载战斗中可能需要的图像资源
-        
+        self.load_battle_image()
 
 
     # 保存按钮的回调

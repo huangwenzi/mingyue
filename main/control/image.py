@@ -8,11 +8,12 @@ import pygame
 # 窗口
 class Image():
     # 初始化
+    # parent : 父级窗口
     # path : 图像资源地址
     # name : 资源名
-    # tmp_type : 游戏类型
-    # parent : 父级窗口
-    def __init__(self, parent, path, name, tmp_type):
+    # tmp_type : 图像类型
+    # postion : 坐标
+    def __init__(self, parent, path, name, tmp_type, postion):
         self.parent = parent    # 父级窗口
         self.image_list = []    # 子级窗口列表
         self.image = self.background = pygame.image.load(path)
@@ -20,8 +21,9 @@ class Image():
         self.type = tmp_type    # 游戏类型
         self.width = self.image.get_width()    # 图像宽度
         self.height = self.image.get_height()  # 图像高度
-        self.x = 0              # 相对父级的x坐标
-        self.y = 0              # 相对父级的y坐标
+        self.x = postion[0]
+                      # 相对父级的x坐标
+        self.y = postion[1]              # 相对父级的y坐标
 
     # 绘制窗口内的图像资源
     def blit_image(self):
@@ -32,11 +34,14 @@ class Image():
 
     # 添加一个窗口
     # 统一以parent为绘制窗口
-    def add_image(self, path, name, postion, tmp_type, callback):
+    # path : 图像资源地址
+    # name : 资源名
+    # tmp_type : 图像类型
+    # postion : 坐标
+    # callback : 对应的回调函数
+    def add_image(self, path, name, tmp_type, postion, callback):
         # 添加图像到列表
-        tmp_image = Image(self.parent, path, name, tmp_type)
-        tmp_image.x = postion[0]
-        tmp_image.y = postion[1]
+        tmp_image = Image(self.parent, path, name, tmp_type, postion)
         self.image_list.append(tmp_image)
         self.parent.image_callback[name] = callback
 

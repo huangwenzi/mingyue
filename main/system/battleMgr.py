@@ -34,3 +34,5 @@ class BattleMgr():
             tmp_id = enemy_arr[idx]["id"]
             tmp_lv = enemy_arr[idx]["lv"]
             self.match_actor.append(Actor(tmp_id, tmp_lv))
+
+    
