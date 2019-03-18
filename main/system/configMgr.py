@@ -18,6 +18,7 @@ class ConfigMgr():
     # 加载json
     # path : 要加载的文件地址
     def load_config(self, path):
+        path = "main/" + path
         with open(path, 'r', encoding='utf-8', errors='ignore') as f:
             return json.load(f)
 
