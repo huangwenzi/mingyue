@@ -163,6 +163,13 @@ class ImageMgr():
                 tmp_image = Image(self, skill_path_str,
                                   image_name, "skill", [0, 0])
                 battle_image_dict[image_name] = tmp_image
+    
+    # 战斗场景初始化
+    def battle_scene_init(self):
+        # 初始化己方
+        myself_actor = self.battleMgr.myself_actor
+        for idx in range(0, len(myself_actor)):
+            pass
 
     # 战斗按钮的回调
     def fight_callback(self):
@@ -176,9 +183,9 @@ class ImageMgr():
 
         # 加载战斗中可能需要的图像资源
         self.load_battle_image()
-        a = 1
 
         # 初始化角色起始位置和状态
+        self.battle_scene_init()
 
     # 保存按钮的回调
     def save_callback(self):

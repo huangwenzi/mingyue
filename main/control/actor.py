@@ -30,7 +30,7 @@ class Skill():
 
     def __init__(self, rme_str):
         skill_arr = rme_str.split(",")
-        self.id = float(skill_arr[0])
+        self.id = int(skill_arr[0])
         self.pro = float(skill_arr[1])
 
 # 角色
@@ -59,6 +59,17 @@ class Actor():
         self.growUp = Attr()
         # 角色技能
         self.skill = []
+        # 下面数据战斗中使用
+        # 位置
+        self.x = 0
+        self.y = 0
+        # 上次行动的时间
+        self.last_time = 0
+        # 战斗中属性
+        self.battle_attr = Attr()
+        # 当前行动状态
+        self.state = "wait"
+        # 当前状态的步骤
 
         # 数据处理
         # 初始属性解析
