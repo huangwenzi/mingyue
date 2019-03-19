@@ -60,6 +60,7 @@ class ImageMgr():
             # 绘制背景
             self.image.blit(self.battle_background, (self.x, self.y))
             # 根据战斗角色的状态绘制
+            self.blit_battle()
 
         # 显示
         pygame.display.flip()
@@ -101,7 +102,7 @@ class ImageMgr():
     # 角色 : actor_(actor_id)_(敌我标识)_(状态标识)_(状态序列号)
     # 技能 : skill_(skill_id)
     def load_battle_image(self):
-        # 先清空旧数据
+        # 先清空旧数据(战斗结束也清一下，这里再清一遍)
         self.battle_image_dict = {}
         battle_image_dict = self.battle_image_dict
         actor_path = "main/FineArts/actor"
@@ -116,7 +117,7 @@ class ImageMgr():
             actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
             image_name = id_str + "_" + action_str
             tmp_image = Image(self, actor_path_str,
-                              image_name, "actor", [0, 0])
+                              image_name, game_enum.iamge_type.actor, [0, 0])
             battle_image_dict[image_name] = tmp_image
             # 加载攻击图像资源
             id_str = "actor_" + str(tmp_actor.id)
@@ -125,7 +126,7 @@ class ImageMgr():
                 actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
                 image_name = id_str + "_" + action_str
                 tmp_image = Image(self, actor_path_str,
-                                    image_name, "actor", [0, 0])
+                                    image_name, game_enum.iamge_type.actor, [0, 0])
                 battle_image_dict[image_name] = tmp_image
             # 加载要用到的技能资源
             skill = tmp_actor.skill
@@ -133,7 +134,7 @@ class ImageMgr():
                 image_name = "skill_" + str(tmp_skill.id)
                 skill_path_str = skill_path + "/" + image_name + ".png"
                 tmp_image = Image(self, skill_path_str,
-                                  image_name, "skill", [0, 0])
+                                  image_name, game_enum.iamge_type.skill, [0, 0])
                 battle_image_dict[image_name] = tmp_image
         # 加载对手的资源
         match_actor = self.battleMgr.match_actor
@@ -144,7 +145,7 @@ class ImageMgr():
             actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
             image_name = id_str + "_" + action_str
             tmp_image = Image(self, actor_path_str,
-                              image_name, "actor", [0, 0])
+                              image_name, game_enum.iamge_type.actor, [0, 0])
             battle_image_dict[image_name] = tmp_image
             # 加载攻击图像资源
             id_str = "actor_" + str(tmp_actor.id)
@@ -153,7 +154,7 @@ class ImageMgr():
                 actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
                 image_name = id_str + "_" + action_str
                 tmp_image = Image(self, actor_path_str,
-                                    image_name, "actor", [0, 0])
+                                    image_name, game_enum.iamge_type.actor, [0, 0])
                 battle_image_dict[image_name] = tmp_image
             # 加载要用到的技能资源
             skill = tmp_actor.skill
@@ -161,15 +162,53 @@ class ImageMgr():
                 image_name = "skill_" + str(tmp_skill.id)
                 skill_path_str = skill_path + "/" + image_name + ".png"
                 tmp_image = Image(self, skill_path_str,
-                                  image_name, "skill", [0, 0])
+                                  image_name, game_enum.iamge_type.skill, [0, 0])
                 battle_image_dict[image_name] = tmp_image
     
     # 战斗场景初始化
     def battle_scene_init(self):
         # 初始化己方
         myself_actor = self.battleMgr.myself_actor
-        for idx in range(0, len(myself_actor)):
-            pass
+        count = 0   # 当前是第几个排序的角色，用于设置位置
+        for tmp_actor in myself_actor:
+            tmp_actor.x = (count//4 + 1) * 50
+            tmp_actor.y = (count% 4 + 1) * 100
+            tmp_actor.camp = game_enum.actor.team
+            self.last_time = time.time()
+            tmp_actor.init_battle_attr()
+            tmp_actor.state = game_enum.actor.stand
+            tmp_actor.state_idx = 0
+        # 初始化敌方
+        match_actor = self.battleMgr.match_actor
+        count = 0   # 当前是第几个排序的角色，用于设置位置
+        for tmp_actor in match_actor:
+            tmp_actor.x = self.width - (count//4 + 1) * 50
+            tmp_actor.y = (count% 4 + 1) * 100
+            tmp_actor.camp = game_enum.actor.enemy
+            self.last_time = time.time()
+            tmp_actor.init_battle_attr()
+            tmp_actor.state = game_enum.actor.stand
+            tmp_actor.state_idx = 0
+
+    # 战斗过程计算
+    def battle_reckon(self):
+        pass
+
+    # 战斗绘制
+    def blit_battle(self):
+        # 先绘制己方
+        myself_actor = self.battleMgr.myself_actor
+        for tmp_actor in myself_actor:
+            image_name = tmp_actor.get_actor_image_name()
+            # 如果是站立和移动状态，只需要绘制角色就好了(移动还没有，后面再出对应图像)
+            if tmp_actor.state == game_enum.actor.stand:
+                self.image.blit(self.battle_image_dict[image_name], (tmp_actor.x, tmp_actor.y))
+            elif tmp_actor.state == game_enum.actor.attack:
+                self.image.blit(self.battle_image_dict[image_name], (tmp_actor.x, tmp_actor.y))
+                # 如果是攻击的最后一下，还要把对应的技能显示出来
+                if tmp_actor.state_idx == tmp_actor.ATTACK_MAX_IDX:
+                    skill_name = tmp_actor.get_skill_image_name()
+                    self.image.blit(self.battle_image_dict[skill_name], (tmp_actor.x, tmp_actor.y))#这里的显示位置应该作用对象的位置
 
     # 战斗按钮的回调
     def fight_callback(self):

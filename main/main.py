@@ -18,8 +18,8 @@ def run():
                     sys.exit(0)
             # 处理鼠标事件
             imageMgr.mouse_event()
-            # 战斗管理器计算
-            
+            # 战斗管理器战斗计算
+            imageMgr.battle_reckon()
             # 绘制界面
             imageMgr.blit_image()
         except OSError as err:

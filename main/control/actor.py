@@ -1,10 +1,12 @@
 # 系统模块
 import time
+import copy
 # 三方模块
 
 # 项目模块
 from enums.game_enum import game_enum
 from system.configMgr import configMgr
+
 
 # 属性
 
@@ -37,6 +39,9 @@ class Skill():
 
 
 class Actor():
+    # 当前的攻击最大索引号
+    ATTACK_MAX_IDX = 3
+
     # 初始化角色属性
     # id : 角色id
     # lv : 角色等级
@@ -59,17 +64,23 @@ class Actor():
         self.growUp = Attr()
         # 角色技能
         self.skill = []
+
         # 下面数据战斗中使用
         # 位置
         self.x = 0
         self.y = 0
+        # 阵营队友或是敌人
+        self.camp = ""
         # 上次行动的时间
         self.last_time = 0
         # 战斗中属性
         self.battle_attr = Attr()
         # 当前行动状态
-        self.state = "wait"
+        self.state = game_enum.state.wati
         # 当前状态的步骤
+        self.state_idx = 0
+        # 正在使用的技能
+        self.now_skill = 0
 
         # 数据处理
         # 初始属性解析
@@ -123,3 +134,19 @@ class Actor():
         self.now_attr.move = self.init_attr.move + lv * self.growUp.move
         self.now_attr.attack_range = self.init_attr.attack_range + \
             lv * self.growUp.attack_range
+
+    # 初始化战斗属性
+    def init_battle_attr(self):
+        # 先拷一份基础属性
+        self.battle_attr = copy.deepcopy(self.now_attr)
+        # 计算技能被动加成（自身的加成在这里计算，群体的在外面一起计算叠加）
+
+    # 获取当前状态对应的角色图像资源名
+    def get_actor_image_name(self):
+        name = "actor_" + str(self.id) + "_" + self.camp + "_" + self.state + "_" + str(self.state_idx)
+        return name
+    
+    # 获取当前使用的技能图像资源名
+    def get_skill_image_name(self):
+        name = "skill_" + str(self.now_skill)
+        return name
