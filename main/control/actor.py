@@ -9,8 +9,6 @@ from system.configMgr import configMgr
 
 
 # 属性
-
-
 class Attr():
     hp = 0          # 生命
     attack = 0      # 物攻
@@ -24,8 +22,6 @@ class Attr():
     attack_range = 0  # 攻击范围
 
 # 技能
-
-
 class Skill():
     id = 0      # 技能id
     pro = 0     # 概率
@@ -35,11 +31,20 @@ class Skill():
         self.id = int(skill_arr[0])
         self.pro = float(skill_arr[1])
 
+# 目标
+class Target():
+    # 阵营
+    camp = ""
+    # 目标id
+    id = -1
+    # 目标位置
+    x = 0
+    y = 0
+
+
 # 角色
-
-
 class Actor():
-    # 当前的攻击最大索引号
+    # 当前的攻击最大索引号,大于就重置
     ATTACK_MAX_IDX = 3
 
     # 初始化角色属性
@@ -69,10 +74,10 @@ class Actor():
         # 位置
         self.x = 0
         self.y = 0
-        # 阵营队友或是敌人
+        # 阵营是玩家的队友或是敌人
         self.camp = ""
-        # 上次行动的时间
-        self.last_time = 0
+        # 下次行动的时间
+        self.next_time = 0
         # 战斗中属性
         self.battle_attr = Attr()
         # 当前行动状态
@@ -81,6 +86,8 @@ class Actor():
         self.state_idx = 0
         # 正在使用的技能
         self.now_skill = 0
+        # 要攻击的目标
+        self.target = Target()
 
         # 数据处理
         # 初始属性解析

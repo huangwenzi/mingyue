@@ -7,6 +7,7 @@ from control.mouse import Mouse
 from control.image import Image
 from enums.game_enum import game_enum
 from system.battleMgr import BattleMgr
+from system.configMgr import configMgr
 
 # 图像管理器
 
@@ -16,7 +17,7 @@ class ImageMgr():
     def __init__(self):
         # 基本设置
         self.last_time = 0          # 上次刷新的时间
-        self.frames = 50            # 帧数
+        self.frames = configMgr.game["frames"]         # 帧数
         self.normal_image_list = []  # 平常图像列表 (注意列表的顺序代表z轴)
         self.normal_background = pygame.image.load(
             "main/FineArts/png/背景/平常背景图.jpg")    # 平常背景图片
@@ -189,9 +190,55 @@ class ImageMgr():
             tmp_actor.init_battle_attr()
             tmp_actor.state = game_enum.actor.stand
             tmp_actor.state_idx = 0
+        # 初始队友增益buff
+        # 初始化对手减益buff
 
     # 战斗过程计算
     def battle_reckon(self):
+        # 先进行己方的计算
+        for tmp_actor in self.battleMgr.myself_actor:
+            # 是否在行动时间
+            now = time.time()
+            if tmp_actor.next_time < now:
+                # 如果没有进行攻击，寻找最近的目标
+                if tmp_actor.state == game_enum.actor.stand:
+                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
+                # 如果没有行动目标
+                if tmp_actor.target.id == -1:
+                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
+                # 是否在攻击范围内
+                pos_0 = [tmp_actor.x, tmp_actor.y]
+                pos_1 = [tmp_actor.target.x, tmp_actor.target.y]
+                distance = self.battleMgr.two_pos_distance(pos_0, pos_1)
+                # 在范围内进行攻击
+                if pow(tmp_actor.battle_attr.attack_range, 2) >= distance:
+                    pass
+                # 不在范围内进行移动,设置状态和下次行动的时间
+                else:   
+                    self.battleMgr.actor_move(tmp_actor)
+        # 进行敌方的计算
+        for tmp_actor in self.battleMgr.myself_actor:
+            # 是否在行动时间
+            now = time.time()
+            if tmp_actor.next_time < now:
+                # 如果没有进行攻击，寻找最近的目标
+                if tmp_actor.state == game_enum.actor.stand:
+                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
+                # 如果没有行动目标
+                if tmp_actor.target.id == -1:
+                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
+                # 是否在攻击范围内
+                pos_0 = [tmp_actor.x, tmp_actor.y]
+                pos_1 = [tmp_actor.target.x, tmp_actor.target.y]
+                distance = self.battleMgr.two_pos_distance(pos_0, pos_1)
+                # 在范围内进行攻击
+                if pow(tmp_actor.battle_attr.attack_range, 2) >= distance:
+                    pass
+                # 不在范围内进行移动,设置状态和下次行动的时间
+                else:   
+                    self.battleMgr.actor_move(tmp_actor)
+
+
         pass
 
     # 战斗绘制
@@ -208,7 +255,7 @@ class ImageMgr():
                 # 如果是攻击的最后一下，还要把对应的技能显示出来
                 if tmp_actor.state_idx == tmp_actor.ATTACK_MAX_IDX:
                     skill_name = tmp_actor.get_skill_image_name()
-                    self.image.blit(self.battle_image_dict[skill_name], (tmp_actor.x, tmp_actor.y))#这里的显示位置应该作用对象的位置
+                    self.image.blit(self.battle_image_dict[skill_name], (tmp_actor.target.x, tmp_actor.target.y))#这里的显示位置应该是作用对象的位置（有可能是队友）
 
     # 战斗按钮的回调
     def fight_callback(self):
