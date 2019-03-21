@@ -79,7 +79,7 @@ class Location():
     fz = "fz"           # 辅助
     ass = "ass"         # 刺客
 
-
+# 角色参数
 class Actor():
     # 状态
     stand = "stand"        # 站立

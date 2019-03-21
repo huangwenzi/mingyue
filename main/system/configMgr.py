@@ -11,7 +11,8 @@ class ConfigMgr():
 
     # 初始化各个要加载的配置文件
     def __init__(self):
-        self.player = self.load_config("config/player.json")       # 玩家配置
+        self.game = self.load_config("config/game.json")        # 游戏配置
+        self.player = self.load_config("config/player.json")    # 玩家配置
         self.actor = self.load_config("config/actor.json")      # 角色配置
         self.skill = self.load_config("config/skill.json")      # 技能配置
         
