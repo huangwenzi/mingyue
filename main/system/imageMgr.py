@@ -217,7 +217,7 @@ class ImageMgr():
                 else:   
                     self.battleMgr.actor_move(tmp_actor)
         # 进行敌方的计算
-        for tmp_actor in self.battleMgr.myself_actor:
+        for tmp_actor in self.battleMgr.match_actor:
             # 是否在行动时间
             now = time.time()
             if tmp_actor.next_time < now:
