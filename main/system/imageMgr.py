@@ -10,8 +10,15 @@ from system.battleMgr import BattleMgr
 from system.configMgr import configMgr
 
 # 图像管理器
-
-
+# blit_image : 绘制刷新界面
+# mouse_event : 鼠标事件
+# add_normal_image : 添加一个图像
+# load_battle_image : 加载战斗中需要用到的角色资源
+# battle_scene_init : 战斗场景初始化
+# battle_reckon : 战斗过程计算
+# blit_battle : 战斗绘制
+# fight_callback : 战斗按钮的回调
+# save_callback : 保存按钮的回调
 class ImageMgr():
 
     def __init__(self):
@@ -195,51 +202,7 @@ class ImageMgr():
 
     # 战斗过程计算
     def battle_reckon(self):
-        # 先进行己方的计算
-        for tmp_actor in self.battleMgr.myself_actor:
-            # 是否在行动时间
-            now = time.time()
-            if tmp_actor.next_time < now:
-                # 如果没有进行攻击，寻找最近的目标
-                if tmp_actor.state == game_enum.actor.stand:
-                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
-                # 如果没有行动目标
-                if tmp_actor.target.id == -1:
-                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
-                # 是否在攻击范围内
-                pos_0 = [tmp_actor.x, tmp_actor.y]
-                pos_1 = [tmp_actor.target.x, tmp_actor.target.y]
-                distance = self.battleMgr.two_pos_distance(pos_0, pos_1)
-                # 在范围内进行攻击
-                if pow(tmp_actor.battle_attr.attack_range, 2) >= distance:
-                    pass
-                # 不在范围内进行移动,设置状态和下次行动的时间
-                else:   
-                    self.battleMgr.actor_move(tmp_actor)
-        # 进行敌方的计算
-        for tmp_actor in self.battleMgr.match_actor:
-            # 是否在行动时间
-            now = time.time()
-            if tmp_actor.next_time < now:
-                # 如果没有进行攻击，寻找最近的目标
-                if tmp_actor.state == game_enum.actor.stand:
-                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
-                # 如果没有行动目标
-                if tmp_actor.target.id == -1:
-                    tmp_actor.target = self.battleMgr.get_front_target(tmp_actor)
-                # 是否在攻击范围内
-                pos_0 = [tmp_actor.x, tmp_actor.y]
-                pos_1 = [tmp_actor.target.x, tmp_actor.target.y]
-                distance = self.battleMgr.two_pos_distance(pos_0, pos_1)
-                # 在范围内进行攻击
-                if pow(tmp_actor.battle_attr.attack_range, 2) >= distance:
-                    pass
-                # 不在范围内进行移动,设置状态和下次行动的时间
-                else:   
-                    self.battleMgr.actor_move(tmp_actor)
-
-
-        pass
+        self.battleMgr.battle_reckon()
 
     # 战斗绘制
     def blit_battle(self):

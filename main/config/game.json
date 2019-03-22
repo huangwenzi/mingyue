@@ -1,3 +1,4 @@
 {
-    "frames":50
+    "frames":50,
+    "move_interval":0.1
 }
