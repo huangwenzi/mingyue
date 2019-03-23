@@ -24,9 +24,9 @@ class Skill_type():
 
 # 技能目标
 class Skill_target():
-    myself = 0      # 自身
-    team = 1        # 团队
-    Enemy = 2       # 敌人
+    myself = "myself"      # 自身
+    team = "team"        # 团队
+    enemy = "enemy"       # 敌人
     # everyone = 3   # 不分敌我(暂不支持)
 
 # 优先作用目标
