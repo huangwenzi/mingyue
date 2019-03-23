@@ -214,15 +214,18 @@ class BattleMgr():
         # 获取全部存活角色
         if camp == "all":
             actor_arr = self.myself_actor + self.match_actor
+        # 获取自身
+        elif camp == game_enum.skill_target.myself:
+            actor_arr = [actor]
         # 获取队友
-        elif camp == game_enum.actor.team:
+        elif camp == game_enum.skill_target.team:
             # 区分本身阵营
             if actor.camp == game_enum.actor.team:
                 actor_arr = self.myself_actor
             else:
                 actor_arr = self.match_actor
         # 获取敌人
-        elif camp == game_enum.actor.enemy:
+        elif camp == game_enum.skill_target.enemy:
             # 区分本身阵营
             if actor.camp == game_enum.actor.team:
                 actor_arr = self.match_actor
@@ -239,27 +242,37 @@ class BattleMgr():
     def skill_reckon(self, actor):
         # 查找对应的技能
         skill_id = actor.now_skill
-        skill_obj = None
+        tmp_skill = None
         for tmp_skill in actor.skill:
             if tmp_skill.id == skill_id:
-                skill_obj = tmp_skill
+                tmp_skill = tmp_skill
         
         # 伤害型(直接造成伤害)
-        if skill_obj.m_type == game_enum.skill_type.hurt:
+        if tmp_skill.m_type == game_enum.skill_type.hurt:
             # 获取存活的作用目标
-            acotr_arr = self.get_survival_actor(actor, game_enum.actor.enemy)
+            acotr_arr = self.get_survival_actor(actor, tmp_skill.target)
             # 计算伤害
-            hurt_vlaue = skill_obj.reckon_num(actor)
+            hurt_vlaue = tmp_skill.reckon_num(actor)
             # 获取作用目标
-            eff_actor = skill_obj.get_eff_actor(acotr_arr)
+            eff_actor = tmp_skill.get_eff_actor(acotr_arr)
             # 扣除生命
             for tmp_actor in eff_actor:
                 tmp_actor.add_hp(-hurt_vlaue)
         # # 
-        # elif skill_obj.m_type == game_enum.skill_type.hurt:
+        # elif tmp_skill.m_type == game_enum.skill_type.hurt:
 
     # 初始化被动技能
     def init_passivity_skill(self):
         # 先初始化队友
         for tmp_actor in self.myself_actor:
-            # 遍历技能，是否有
+            # 遍历技能，是否有被动技能
+            for tmp_skill in tmp_actor.skill:
+                if tmp_skill.m_type == game_enum.skill_type.passivity:
+                    actor_arr = self.get_survival_actor(tmp_actor, tmp_skill.target)
+                        eff_actor_arr = tmp_skill.get_eff_actor(tmp_actor, actor_arr)
+                        
+
+
+
+
+                        

@@ -39,6 +39,18 @@ class Attr():
         self.move = float(attr_arr[8])
         self.attack_range = float(attr_arr[9])
 
+    # 属性相加
+    def add_attr(self, attr):
+        self.hp = attr.hp
+        self.attack = attr.attack
+        self.attack_def = attr.attack_def
+        self.magic = attr.magic
+        self.magic_def = attr.magic_def
+        self.violent = attr.violent
+        self.antiriot = attr.antiriot
+        self.speed = attr.speed
+        self.move = attr.move
+        self.attack_range = attr.attack_range
 
 # 技能
 # reckon_num : 计算技能作用数值
@@ -241,16 +253,16 @@ class Actor():
 
         # 计算属性
         # 计算等级对应的属性
-        self.init_attr.hp = self.init_attr.hp + lv * self.growUp.hp
-        self.init_attr.attack = self.init_attr.attack + lv * self.growUp.attack
-        self.init_attr.attack_def = self.init_attr.attack_def + lv * self.growUp.attack_def
-        self.init_attr.magic = self.init_attr.magic + lv * self.growUp.magic
-        self.init_attr.magic_def = self.init_attr.magic_def + lv * self.growUp.magic_def
-        self.init_attr.violent = self.init_attr.violent + lv * self.growUp.violent
-        self.init_attr.antiriot = self.init_attr.antiriot + lv * self.growUp.antiriot
-        self.init_attr.speed = self.init_attr.speed + lv * self.growUp.speed
-        self.init_attr.move = self.init_attr.move + lv * self.growUp.move
-        self.init_attr.attack_range = self.init_attr.attack_range + \
+        self.hp = self.hp + lv * self.growUp.hp
+        self.attack = self.attack + lv * self.growUp.attack
+        self.attack_def = self.attack_def + lv * self.growUp.attack_def
+        self.magic = self.magic + lv * self.growUp.magic
+        self.magic_def = self.magic_def + lv * self.growUp.magic_def
+        self.violent = self.violent + lv * self.growUp.violent
+        self.antiriot = self.antiriot + lv * self.growUp.antiriot
+        self.speed = self.speed + lv * self.growUp.speed
+        self.move = self.move + lv * self.growUp.move
+        self.attack_range = self.attack_range + \
             lv * self.growUp.attack_range
 
     # 初始化战斗属性(这个有问题，要在外面把技能被动加成计算到now_attr先)
