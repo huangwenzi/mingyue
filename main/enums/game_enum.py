@@ -31,14 +31,14 @@ class Skill_target():
 
 # 优先作用目标
 class Skill_first():
-    front = 0       # 最近
-    rand = 1        # 随机
-    hp_high = 2     # 生命高
-    hp_low = 3      # 生命低
-    attack_high = 4 # 攻击高
-    speed_high = 5  # 攻击速度高
-    back = 6        # 最远
-    whole = 7       # 全体
+    front = "front"         # 最近
+    rand = "rand"           # 随机
+    hp_high = "hp_high"     # 生命高
+    hp_low = "hp_low"       # 生命低
+    attack_high = "attack_high" # 攻击高
+    speed_high = "speed_high"  # 攻击速度高
+    back = "back"           # 最远
+    whole = "whole"         # 全体
 
 # 被动变化条件
 class Skill_condition(object):
