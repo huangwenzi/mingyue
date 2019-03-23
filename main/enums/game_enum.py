@@ -35,7 +35,7 @@ class Skill_first():
     rand = 1        # 随机
     hp_high = 2     # 生命高
     hp_low = 3      # 生命低
-    hurt_high = 4   # 攻击高
+    attack_high = 4 # 攻击高
     speed_high = 5  # 攻击速度高
     back = 6        # 最远
     whole = 7       # 全体
