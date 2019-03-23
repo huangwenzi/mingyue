@@ -175,7 +175,7 @@ class ImageMgr():
     
     # 战斗场景初始化
     def battle_scene_init(self):
-        # 初始化己方
+        # 初始化己方位置状态
         myself_actor = self.battleMgr.myself_actor
         count = 0   # 当前是第几个排序的角色，用于设置位置
         for tmp_actor in myself_actor:
@@ -183,10 +183,8 @@ class ImageMgr():
             tmp_actor.y = (count% 4 + 1) * 100
             tmp_actor.camp = game_enum.actor.team
             self.last_time = time.time()
-            tmp_actor.init_battle_attr()
-            tmp_actor.state = game_enum.actor.stand
-            tmp_actor.state_idx = 0
-        # 初始化敌方
+            tmp_actor.set_actor_state(game_enum.actor.stand)
+        # 初始化敌方位置状态
         match_actor = self.battleMgr.match_actor
         count = 0   # 当前是第几个排序的角色，用于设置位置
         for tmp_actor in match_actor:
@@ -194,11 +192,10 @@ class ImageMgr():
             tmp_actor.y = (count% 4 + 1) * 100
             tmp_actor.camp = game_enum.actor.enemy
             self.last_time = time.time()
-            tmp_actor.init_battle_attr()
-            tmp_actor.state = game_enum.actor.stand
-            tmp_actor.state_idx = 0
-        # 初始队友增益buff
-        # 初始化对手减益buff
+            tmp_actor.set_actor_state(game_enum.actor.stand)
+        # 初始化被动技能
+        self.battleMgr.init_passivity_skill()
+        
 
     # 战斗过程计算
     def battle_reckon(self):
