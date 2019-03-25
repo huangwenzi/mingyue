@@ -34,10 +34,10 @@ class ImageMgr():
         self.image_callback = {}    # 图像资源对应的回调函数
         self.width = self.normal_background.get_width()    # 图像宽度
         self.height = self.normal_background.get_height()  # 图像高度
-        self.image = pygame.display.set_mode((self.width, 500))    # 设置窗体
+        self.image = pygame.display.set_mode((self.width, 600))    # 设置窗体
         self.x = 0
         self.y = 0
-        self.state = game_enum.state.normal  # 当前场景状态
+        self.state = game_enum.state.wati  # 当前场景状态
 
         # 管理器
         self.mouse = Mouse()    # 鼠标事件管理器
@@ -58,7 +58,7 @@ class ImageMgr():
 
         self.last_time += now_time
         # 区分战斗和平常状态下的界面
-        if self.state == game_enum.state.normal:    # 平常界面绘制
+        if self.state == game_enum.state.wati:    # 平常界面绘制
             # 绘制背景
             self.image.blit(self.normal_background, (self.x, self.y))
             # 绘制子级图像
@@ -180,25 +180,39 @@ class ImageMgr():
         count = 0   # 当前是第几个排序的角色，用于设置位置
         for tmp_actor in myself_actor:
             tmp_actor.x = (count//4 + 1) * 50
-            tmp_actor.y = (count% 4 + 1) * 100
+            tmp_actor.y = (count% 4 + 1) * 100 + 50
             tmp_actor.camp = game_enum.actor.team
             self.last_time = time.time()
             tmp_actor.set_actor_state(game_enum.actor.stand)
+            count += 1
         # 初始化敌方位置状态
         match_actor = self.battleMgr.match_actor
         count = 0   # 当前是第几个排序的角色，用于设置位置
         for tmp_actor in match_actor:
             tmp_actor.x = self.width - (count//4 + 1) * 50
-            tmp_actor.y = (count% 4 + 1) * 100
+            tmp_actor.y = (count% 4 + 1) * 100 + 50
             tmp_actor.camp = game_enum.actor.enemy
             self.last_time = time.time()
             tmp_actor.set_actor_state(game_enum.actor.stand)
+            count += 1
+        # 设置现在属性
+        for tmp_actor in myself_actor:
+            tmp_actor.init_now_attr()
+        for tmp_actor in match_actor:
+            tmp_actor.init_now_attr()
         # 初始化被动技能
         self.battleMgr.init_passivity_skill()
+        # 拷贝战斗属性
+        for tmp_actor in myself_actor:
+            tmp_actor.init_battle_attr()
+        for tmp_actor in match_actor:
+            tmp_actor.init_battle_attr()
         
 
     # 战斗过程计算
     def battle_reckon(self):
+        if self.state != game_enum.state.battle:
+            return
         self.battleMgr.battle_reckon()
 
     # 战斗绘制
@@ -209,13 +223,13 @@ class ImageMgr():
             image_name = tmp_actor.get_actor_image_name()
             # 如果是站立和移动状态，只需要绘制角色就好了(移动还没有，后面再出对应图像)
             if tmp_actor.state == game_enum.actor.stand:
-                self.image.blit(self.battle_image_dict[image_name], (tmp_actor.x, tmp_actor.y))
+                self.image.blit(self.battle_image_dict[image_name].image, (tmp_actor.x, tmp_actor.y))
             elif tmp_actor.state == game_enum.actor.attack:
-                self.image.blit(self.battle_image_dict[image_name], (tmp_actor.x, tmp_actor.y))
+                self.image.blit(self.battle_image_dict[image_name].image, (tmp_actor.x, tmp_actor.y))
                 # 如果是攻击的最后一下，还要把对应的技能显示出来
                 if tmp_actor.state_idx == tmp_actor.ATTACK_MAX_IDX:
                     skill_name = tmp_actor.get_skill_image_name()
-                    self.image.blit(self.battle_image_dict[skill_name], (tmp_actor.target.x, tmp_actor.target.y))#这里的显示位置应该是作用对象的位置（有可能是队友）
+                    self.image.blit(self.battle_image_dict[skill_name].image, (tmp_actor.target.x, tmp_actor.target.y))#这里的显示位置应该是作用对象的位置（有可能是队友）
 
     # 战斗按钮的回调
     def fight_callback(self):

@@ -96,7 +96,7 @@ class BattleMgr():
         actor.x += move_y
         actor.set_actor_state(game_enum.actor.stand)
         # 设置下次行动的时间
-        actor.next_time += time.time() + configMgr.game["move_interval"]
+        actor.next_time = time.time() + configMgr.game["move_interval"]
 
     # 对目标进行攻击
     # actor : 对应角色
@@ -122,7 +122,7 @@ class BattleMgr():
             self.skill_reckon(actor)
 
         # 设置下次行动的时间
-        actor.next_time += time.time() + 1/actor.speed
+        actor.next_time = time.time() + 1/actor.battle_attr.speed
 
     # 战斗计算
     def battle_reckon(self):
@@ -269,7 +269,22 @@ class BattleMgr():
             for tmp_skill in tmp_actor.skill:
                 if tmp_skill.m_type == game_enum.skill_type.passivity:
                     actor_arr = self.get_survival_actor(tmp_actor, tmp_skill.target)
-                        eff_actor_arr = tmp_skill.get_eff_actor(tmp_actor, actor_arr)
+                    eff_actor_arr = tmp_skill.get_eff_actor(tmp_actor, actor_arr)
+                    add_attr = tmp_skill.get_attr_add(tmp_actor)
+                    for tmp_actor in eff_actor_arr:
+                        tmp_actor.now_attr.add_attr(add_attr)
+        # 再初始化敌人
+        for tmp_actor in self.match_actor:
+            # 遍历技能，是否有被动技能
+            for tmp_skill in tmp_actor.skill:
+                if tmp_skill.m_type == game_enum.skill_type.passivity:
+                    actor_arr = self.get_survival_actor(tmp_actor, tmp_skill.target)
+                    eff_actor_arr = tmp_skill.get_eff_actor(tmp_actor, actor_arr)
+                    add_attr = tmp_skill.get_attr_add(tmp_actor)
+                    for tmp_actor in eff_actor_arr:
+                        tmp_actor.now_attr.add_attr(add_attr)
+                    
+
                         
 
 

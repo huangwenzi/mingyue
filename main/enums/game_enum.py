@@ -40,6 +40,11 @@ class Skill_first():
     back = "back"           # 最远
     whole = "whole"         # 全体
 
+# 加成基于
+class Skill_multiple_base():
+    lv = "lv"       # 玩家等级
+    attr = "attr"   # 玩家属性
+
 # 被动变化条件
 class Skill_condition(object):
     hp_down = 0     # 生命下降

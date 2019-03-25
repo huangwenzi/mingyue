@@ -41,16 +41,16 @@ class Attr():
 
     # 属性相加
     def add_attr(self, attr):
-        self.hp = attr.hp
-        self.attack = attr.attack
-        self.attack_def = attr.attack_def
-        self.magic = attr.magic
-        self.magic_def = attr.magic_def
-        self.violent = attr.violent
-        self.antiriot = attr.antiriot
-        self.speed = attr.speed
-        self.move = attr.move
-        self.attack_range = attr.attack_range
+        self.hp += attr.hp
+        self.attack += attr.attack
+        self.attack_def += attr.attack_def
+        self.magic += attr.magic
+        self.magic_def += attr.magic_def
+        self.violent += attr.violent
+        self.antiriot += attr.antiriot
+        self.speed += attr.speed
+        self.move += attr.move
+        self.attack_range += attr.attack_range
 
 # 技能
 # reckon_num : 计算技能作用数值
@@ -103,6 +103,28 @@ class Skill():
         value += self.multiple.attack_range * actor.battle_attr.attack_range
         return value
 
+    # 获取属性加成的属性对象
+    # actor : 计算基于的玩家，及他的战斗属性
+    def get_attr_add(self, actor):
+        ret_attr = Attr()
+        type_arr = [game_enum.skill_type.passivity]
+        # 如果不是有效提供被动加成的技能退出
+        if self.m_type not in type_arr:
+            return ret_attr
+        
+        # 计算属性
+        ret_attr.hp = actor.init_attr.hp * self.multiple.hp
+        ret_attr.attack = actor.init_attr.attack * self.multiple.attack
+        ret_attr.attack_def = actor.init_attr.attack_def * self.multiple.attack_def
+        ret_attr.magic = actor.init_attr.magic * self.multiple.magic
+        ret_attr.magic_def = actor.init_attr.magic_def * self.multiple.magic_def
+        ret_attr.violent = actor.init_attr.violent * self.multiple.violent
+        ret_attr.antiriot = actor.init_attr.antiriot * self.multiple.antiriot
+        ret_attr.speed = actor.init_attr.speed * self.multiple.speed
+        ret_attr.move = actor.init_attr.move * self.multiple.move
+        ret_attr.attack_range = actor.init_attr.attack_range  * self.multiple.attack_range
+        return ret_attr
+
     # 排序函数汇总
     # hp
     def sort_hp(self, elem):
@@ -133,12 +155,12 @@ class Skill():
             # 拷贝一份，后面找索引
             tmp_arr = copy.deepcopy(value_arr)
             value_arr.sort()
-            tmp_arr = []    # 这个用来装拍完序的角色
+            sort_arr = []    # 这个用来装拍完序的角色
             for idx in range(0, len(value_arr)):
                 now_value = value_arr[idx]
                 actor_arr_idx = tmp_arr.index(now_value)
-                tmp_arr.append(actor_arr[actor_arr_idx])
-            ret_arr = tmp_arr[0:max_num]
+                sort_arr.append(actor_arr[actor_arr_idx])
+            ret_arr = sort_arr[0:max_num]
         # 随机
         elif self.first == game_enum.skill_first.rand:
             rand_arr = list(range(0, len(actor_arr)))
@@ -221,7 +243,7 @@ class Actor():
         self.init_attr = Attr(tmp_cfg["init_attr"])
         # 角色成长属性
         self.growUp = Attr(tmp_cfg["growUp"])
-        # 角色当前属性(计算等级之类的加成后)
+        # 角色当前属性(计算等级之类的加成后)用于做战斗计算的原始值
         self.now_attr = Attr()
         # 角色技能
         self.skill = []
@@ -253,23 +275,28 @@ class Actor():
 
         # 计算属性
         # 计算等级对应的属性
-        self.hp = self.hp + lv * self.growUp.hp
-        self.attack = self.attack + lv * self.growUp.attack
-        self.attack_def = self.attack_def + lv * self.growUp.attack_def
-        self.magic = self.magic + lv * self.growUp.magic
-        self.magic_def = self.magic_def + lv * self.growUp.magic_def
-        self.violent = self.violent + lv * self.growUp.violent
-        self.antiriot = self.antiriot + lv * self.growUp.antiriot
-        self.speed = self.speed + lv * self.growUp.speed
-        self.move = self.move + lv * self.growUp.move
-        self.attack_range = self.attack_range + \
+        self.init_attr.hp = self.init_attr.hp + lv * self.growUp.hp
+        self.init_attr.attack = self.init_attr.attack + lv * self.growUp.attack
+        self.init_attr.attack_def = self.init_attr.attack_def + lv * self.growUp.attack_def
+        self.init_attr.magic = self.init_attr.magic + lv * self.growUp.magic
+        self.init_attr.magic_def = self.init_attr.magic_def + lv * self.growUp.magic_def
+        self.init_attr.violent = self.init_attr.violent + lv * self.growUp.violent
+        self.init_attr.antiriot = self.init_attr.antiriot + lv * self.growUp.antiriot
+        self.init_attr.speed = self.init_attr.speed + lv * self.growUp.speed
+        self.init_attr.move = self.init_attr.move + lv * self.growUp.move
+        self.init_attr.attack_range = self.init_attr.attack_range + \
             lv * self.growUp.attack_range
+
+    # 初始化当前属性
+    def init_now_attr(self):
+        # 先拷一份初始属性
+        self.now_attr = copy.deepcopy(self.init_attr)
 
     # 初始化战斗属性(这个有问题，要在外面把技能被动加成计算到now_attr先)
     def init_battle_attr(self):
         # 计算技能被动加成（应该在外面就进行一边计算）
         # 先拷一份当前属性
-        self.battle_attr = copy.deepcopy(self.init_attr)
+        self.battle_attr = copy.deepcopy(self.now_attr)
         
     # 获取当前状态对应的角色图像资源名
     def get_actor_image_name(self):
