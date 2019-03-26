@@ -1,4 +1,7 @@
 {
     "frames":30,
-    "move_interval":0.1
+    "move_interval":0.1,
+    "font":"SimHei",
+    "font_size":"16",
+    "font_color":[0, 0, 0]
 }

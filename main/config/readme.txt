@@ -30,6 +30,12 @@ multiple:效果倍率   0.生命|1.物攻|2.物抗|3.法攻|4.法抗|5.暴击|6.
 base:上面的效果基于那个属性 
 rounds:作用回合
 
+1.game.json
+frames:帧数
+move_interval:移动时间间隔
+font:字体
+font_size:字体大小
+font_color:字体 颜色
 
 1.data.json
 保存角色数据

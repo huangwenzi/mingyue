@@ -39,6 +39,9 @@ class ImageMgr():
         self.height = self.normal_background.get_height()  # 图像高度
         self.image = pygame.display.set_mode((self.width, 600))    # 设置窗体
         # self.image = pygame.display.set_mode((1, 1))    # 设置窗体
+        self.font = pygame.font.SysFont(configMgr.game["font"], configMgr.game["font_size"])    # 设置字体
+        self.font_color = configMgr.game["font_color"]      # 字体颜色
+        self.bar_color = (0, 100, 0)        # 血条颜色
         self.x = 0
         self.y = 0
         self.state = game_enum.state.wati  # 当前场景状态
@@ -150,8 +153,8 @@ class ImageMgr():
         # 先清空旧数据(战斗结束也清一下，这里再清一遍)
         # 清空战斗图像资源
         self.battle_image_dict = {}
-        self.load_battle_image(self.battleMgr.myself_actor)
-        self.load_battle_image(self.battleMgr.match_actor)
+        self.load_actor_image(self.battleMgr.myself_actor)
+        self.load_actor_image(self.battleMgr.match_actor)
     
     # 战斗场景初始化
     def battle_scene_init(self):
@@ -221,7 +224,14 @@ class ImageMgr():
             # 战斗并且是最后一下，还需要绘制技能
             if tmp_actor.state == game_enum.actor.attack and tmp_actor.state_idx == tmp_actor.ATTACK_MAX_IDX:
                 self.blit_skill(tmp_actor)
-            # 绘制生命
+            #绘制名字
+            self.image.blit(tmp_actor.name, (tmp_actor.x - 50, tmp_actor.y - 115))
+            #绘制生命框
+            pygame.draw.rect(self.image, self.font_color, (tmp_actor.x - 50, tmp_actor.y - 100, 90, 16), 3)#生命条外框
+            hpX = tmp_actor.battle_attr.hp/tmp_actor.now_attr.hp    #计算生命值长度
+            pygame.draw.rect(self.image, self.bar_color, (tmp_actor.x - 47, tmp_actor.y - 97, hpX * 84, 10), )#剩余生命值
+            hp_number = self.font.render('%.1f' % (tmp_actor.battle_attr.hp), True, self.font_color)  # 生命值数值
+            self.image.blit(hp_number, (tmp_actor.x - 30, tmp_actor.y - 100))
 
     # 战斗绘制
     def blit_battle(self):
