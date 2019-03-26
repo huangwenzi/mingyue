@@ -14,23 +14,19 @@ class Iamge_type():
 
 # _______________________________技能使用
 # 技能类型
-class Skill_type():
+class Skill():
     hurt = "hurt"               # 伤害型(直接造成伤害)
     passivity = "passivity"     # 永久被动型(一直提升属性)
     change_passivity = "change_passivity"  # 变动被动型(根据当前属性修改参数)
     curse = "curse"             # 增减益型(添加属性，不可叠加)
     curse_add = "curse_add"     # 增减益型(添加属性，可叠加)
     Continued = "Continued"     # 持续型(添加属性，不可叠加，每个攻击间隔添加)
-
 # 技能目标
-class Skill_target():
     myself = "myself"      # 自身
     team = "team"        # 团队
     enemy = "enemy"       # 敌人
     # everyone = 3   # 不分敌我(暂不支持)
-
 # 优先作用目标
-class Skill_first():
     front = "front"         # 最近
     rand = "rand"           # 随机
     hp_high = "hp_high"     # 生命高
@@ -39,20 +35,21 @@ class Skill_first():
     speed_high = "speed_high"  # 攻击速度高
     back = "back"           # 最远
     whole = "whole"         # 全体
-
 # 加成基于
-class Skill_multiple_base():
     lv = "lv"       # 玩家等级
     attr = "attr"   # 玩家属性
+# 技能范围类型
+    actor_num = "actor_num"         # 玩家数量
+    actor_range = "actor_range"     # 目标范围
 
-# 被动变化条件
+# 被动变化条件(暂未加入)
 class Skill_condition(object):
     hp_down = 0     # 生命下降
 
 
 # _______________________________属性使用
 # 属性类型
-class Attr_type():
+class Attr():
     hp = "hp"               # 生命值
     attack = "attack"       # 攻击
     attack_def = "attack_def"  # 防御
@@ -76,22 +73,18 @@ class State():
 
 # _______________________________角色
 # 定位
-class Location():
+class Actor():
     adc = "adc"         # 射手
     ad = "ad"           # 战士
     ap = "ap"           # 法师
     tank = "tank"       # 坦克
     fz = "fz"           # 辅助
     ass = "ass"         # 刺客
-
-# 角色参数
-class Actor():
-    # 状态
+# 状态
     stand = "stand"        # 站立
     attack = "attack"      # 攻击
     die = "die"            # 死亡
-
-    # 队伍
+# 队伍
     team = "i"        # 队友
     enemy = "d"       # 敌人
 
@@ -100,17 +93,13 @@ class Game_enum():
     # ____________场景
     mouse = Mouse()                 # 输入
     iamge_type = Iamge_type()       # 图像类型
-    # ————————————技能使用
-    skill_type = Skill_type()       # 技能类型
-    skill_target = Skill_target()   # 技能目标
-    skill_first = Skill_first()     # 优先攻击
-    # ____________属性使用
-    attr_type = Attr_type()         # 属性类型
+    # ————————————技能
+    skill = Skill()       # 技能
+    # ____________属性
+    attr = Attr()         # 属性类型
     state = State()                 # 待机状态
     skill_condition = Skill_condition()
     # ____________角色
-    location = Location()           # 定位
     actor = Actor()                 # 角色枚举
-
 
 game_enum = Game_enum()   # 实例化枚举
