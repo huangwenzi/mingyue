@@ -18,6 +18,7 @@ def run():
                     sys.exit(0)
             # 处理鼠标事件
             imageMgr.mouse_event()
+            # imageMgr.fight_callback()
             # 战斗管理器战斗计算
             imageMgr.battle_reckon()
             # 绘制界面

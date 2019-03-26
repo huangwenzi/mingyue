@@ -217,13 +217,11 @@ class ImageMgr():
         for tmp_actor in actor_arr:
             image_name = tmp_actor.get_actor_image_name()
             # 如果是站立和移动状态，只需要绘制角色就好了(移动还没有，后面再出对应图像)
-            if tmp_actor.state == game_enum.actor.stand:
-                self.image.blit(self.battle_image_dict[image_name].image, (tmp_actor.x, tmp_actor.y))
-            elif tmp_actor.state == game_enum.actor.attack:
-                self.image.blit(self.battle_image_dict[image_name].image, (tmp_actor.x, tmp_actor.y))
-                # 如果是攻击的最后一下，还要把对应的技能显示出来
-                if tmp_actor.state_idx == tmp_actor.ATTACK_MAX_IDX:
-                    self.blit_skill(tmp_actor)
+            self.image.blit(self.battle_image_dict[image_name].image, (tmp_actor.x, tmp_actor.y))
+            # 战斗并且是最后一下，还需要绘制技能
+            if tmp_actor.state == game_enum.actor.attack and tmp_actor.state_idx == tmp_actor.ATTACK_MAX_IDX:
+                self.blit_skill(tmp_actor)
+            # 绘制生命
 
     # 战斗绘制
     def blit_battle(self):
