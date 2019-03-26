@@ -13,6 +13,7 @@ from system.configMgr import configMgr
 # get_front_target : 获取最近的敌对角色
 # actor_move : 角色朝目标移动一个距离
 # actor_attack : 对目标进行攻击
+# actor_battle_reckon : 角色进行战斗计算
 # battle_reckon : 战斗计算
 # rand_skill : 为角色随机技能
 # get_target_obj : 获取目标角色对象
@@ -83,17 +84,19 @@ class BattleMgr():
     # 角色朝目标移动一个距离
     # actor : 对应角色
     def actor_move(self, actor):
-        i_x = abs(actor.x - actor.target.x)
-        i_y = abs(actor.y - actor.target.y)
-        move_x = actor.battle_attr.move * i_x/(i_x+i_y)
-        move_y = actor.battle_attr.move * i_y/(i_x+i_y)
+        diff_x = actor.x - actor.target.x
+        diff_y = actor.y - actor.target.y
+        abs_x = abs(diff_x)
+        abs_y = abs(diff_y)
+        move_x = actor.battle_attr.move * abs_x/(abs_x+abs_y)
+        move_y = actor.battle_attr.move * abs_y/(abs_x+abs_y)
         # 对是否反向做判断
-        if i_x > 0:
-            move_x = -1 * move_x
-        if i_y > 0:
-            move_y = -1 * move_y
+        if diff_x > 0:
+            move_x = -move_x
+        if diff_y > 0:
+            move_y = -move_y
         actor.x += move_x
-        actor.x += move_y
+        actor.y += move_y
         actor.set_actor_state(game_enum.actor.stand)
         # 设置下次行动的时间
         actor.next_time = time.time() + configMgr.game["move_interval"]
@@ -116,19 +119,19 @@ class BattleMgr():
             actor.state_idx += 1
         #　最后一下攻击
         elif actor.state_idx >= actor.ATTACK_MAX_IDX:
-            # 状态重置
-            actor.set_actor_state(game_enum.actor.stand)
             # 计算技能效果
             self.skill_reckon(actor)
+            # 状态重置
+            actor.set_actor_state(game_enum.actor.stand)
 
         # 设置下次行动的时间
         actor.next_time = time.time() + 1/actor.battle_attr.speed
 
-    # 战斗计算
-    def battle_reckon(self):
+    # 角色进行战斗计算
+    # actor_arr : 角色数组
+    def actor_battle_reckon(self, actor_arr):
         now = time.time()
-        # 先进行己方的计算
-        for tmp_actor in self.myself_actor:
+        for tmp_actor in actor_arr:
             # 是否在行动时间,并且角色未死亡
             if tmp_actor.state != game_enum.actor.die and tmp_actor.next_time < now:
                 # 如果没有进行攻击，寻找最近的目标
@@ -145,31 +148,11 @@ class BattleMgr():
                 # 不在范围内进行移动,设置状态和下次行动的时间
                 else:   
                     self.actor_move(tmp_actor)
-        # 进行敌方的计算
-        for tmp_actor in self.match_actor:
-            # 是否在行动时间,并且角色未死亡
-            if tmp_actor.state != game_enum.actor.die and tmp_actor.next_time < now:
-                # 如果没有进行攻击，寻找最近的目标
-                if tmp_actor.state == game_enum.actor.stand:
-                    tmp_actor.target = self.get_front_target(tmp_actor)
-                # 如果没有行动目标，寻找最近的目标
-                if tmp_actor.target.id == -1:
-                    tmp_actor.target = self.get_front_target(tmp_actor)
-                # 获取距离
-                distance = tmp_actor.two_pos_distance(tmp_actor, tmp_actor.target)
-                # 在范围内进行攻击
-                if pow(tmp_actor.battle_attr.attack_range, 2) >= distance:
-                    self.actor_attack(tmp_actor)
-                # 不在范围内进行移动,设置状态和下次行动的时间
-                else:
-                    self.actor_move(tmp_actor)
-        # # 伤害计算完后检查检查是否有角色死亡 （已经在修改生命的时候修改状态了）
-        # for tmp_actor in self.myself_actor:
-        #     if tmp_actor.battle_attr.hp <= 0:
-        #         tmp_actor.set_actor_state(game_enum.actor.die)
-        # for tmp_actor in self.match_actor:
-        #     if tmp_actor.battle_attr.hp <= 0:
-        #         tmp_actor.set_actor_state(game_enum.actor.die)
+
+    # 战斗计算
+    def battle_reckon(self):
+        self.actor_battle_reckon(self.myself_actor)
+        self.actor_battle_reckon(self.match_actor)
 
     # 为角色随机技能
     # actor : 对应角色
@@ -215,17 +198,17 @@ class BattleMgr():
         if camp == "all":
             actor_arr = self.myself_actor + self.match_actor
         # 获取自身
-        elif camp == game_enum.skill_target.myself:
+        elif camp == game_enum.skill.myself:
             actor_arr = [actor]
         # 获取队友
-        elif camp == game_enum.skill_target.team:
+        elif camp == game_enum.skill.team:
             # 区分本身阵营
             if actor.camp == game_enum.actor.team:
                 actor_arr = self.myself_actor
             else:
                 actor_arr = self.match_actor
         # 获取敌人
-        elif camp == game_enum.skill_target.enemy:
+        elif camp == game_enum.skill.enemy:
             # 区分本身阵营
             if actor.camp == game_enum.actor.team:
                 actor_arr = self.match_actor
@@ -248,41 +231,39 @@ class BattleMgr():
                 tmp_skill = tmp_skill
         
         # 伤害型(直接造成伤害)
-        if tmp_skill.m_type == game_enum.skill_type.hurt:
+        if tmp_skill.m_type == game_enum.skill.hurt:
             # 获取存活的作用目标
             acotr_arr = self.get_survival_actor(actor, tmp_skill.target)
             # 计算伤害
             hurt_vlaue = tmp_skill.reckon_num(actor)
             # 获取作用目标
-            eff_actor = tmp_skill.get_eff_actor(acotr_arr)
+            eff_actor = tmp_skill.get_eff_actor(actor, acotr_arr)
+            # 添加到作用范围里
+            actor.skill_range.update(tmp_skill, eff_actor)
             # 扣除生命
             for tmp_actor in eff_actor:
                 tmp_actor.add_hp(-hurt_vlaue)
         # # 
-        # elif tmp_skill.m_type == game_enum.skill_type.hurt:
+        # elif tmp_skill.m_type == game_enum.skill.hurt:
+
+    # 角色初始化被动技能
+    def actro_init_passivity_skill(self, actor_arr):
+        for tmp_actor in actor_arr:
+            # 遍历技能，是否有被动技能
+            for tmp_skill in tmp_actor.skill:
+                if tmp_skill.m_type == game_enum.skill.passivity:
+                    # 获取作用的角色
+                    sur_actor_arr = self.get_survival_actor(tmp_actor, tmp_skill.target)
+                    eff_actor_arr = tmp_skill.get_eff_actor(tmp_actor, sur_actor_arr)
+                    # 计算加成到对应角色上
+                    add_attr = tmp_skill.get_attr_add(tmp_actor)
+                    for tmp_actor in eff_actor_arr:
+                        tmp_actor.now_attr.add_attr(add_attr)
 
     # 初始化被动技能
     def init_passivity_skill(self):
-        # 先初始化队友
-        for tmp_actor in self.myself_actor:
-            # 遍历技能，是否有被动技能
-            for tmp_skill in tmp_actor.skill:
-                if tmp_skill.m_type == game_enum.skill_type.passivity:
-                    actor_arr = self.get_survival_actor(tmp_actor, tmp_skill.target)
-                    eff_actor_arr = tmp_skill.get_eff_actor(tmp_actor, actor_arr)
-                    add_attr = tmp_skill.get_attr_add(tmp_actor)
-                    for tmp_actor in eff_actor_arr:
-                        tmp_actor.now_attr.add_attr(add_attr)
-        # 再初始化敌人
-        for tmp_actor in self.match_actor:
-            # 遍历技能，是否有被动技能
-            for tmp_skill in tmp_actor.skill:
-                if tmp_skill.m_type == game_enum.skill_type.passivity:
-                    actor_arr = self.get_survival_actor(tmp_actor, tmp_skill.target)
-                    eff_actor_arr = tmp_skill.get_eff_actor(tmp_actor, actor_arr)
-                    add_attr = tmp_skill.get_attr_add(tmp_actor)
-                    for tmp_actor in eff_actor_arr:
-                        tmp_actor.now_attr.add_attr(add_attr)
+       self.actro_init_passivity_skill(self.myself_actor)
+       self.actro_init_passivity_skill(self.match_actor)
                     
 
                         

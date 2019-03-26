@@ -86,6 +86,10 @@ class Skill():
         self.multiple = Attr(skill_cfg["multiple"])
         # 持续时间
         self.eff_time = skill_cfg["eff_time"]
+        # 作用类型
+        self.range_type = skill_cfg["range_type"]
+        # 作用范围
+        self.range = skill_cfg["range"]
 
     # 计算技能作用数值
     # actor : 计算基于的玩家，及他的战斗属性
@@ -107,7 +111,7 @@ class Skill():
     # actor : 计算基于的玩家，及他的战斗属性
     def get_attr_add(self, actor):
         ret_attr = Attr()
-        type_arr = [game_enum.skill_type.passivity]
+        type_arr = [game_enum.skill.passivity]
         # 如果不是有效提供被动加成的技能退出
         if self.m_type not in type_arr:
             return ret_attr
@@ -147,7 +151,7 @@ class Skill():
         ret_arr = []    
         # 根据条件排序
         # 最近
-        if self.first == game_enum.skill_first.front:
+        if self.first == game_enum.skill.front:
             # 计算每一个的距离
             value_arr = []
             for tmp_actor in actor_arr:
@@ -162,30 +166,30 @@ class Skill():
                 sort_arr.append(actor_arr[actor_arr_idx])
             ret_arr = sort_arr[0:max_num]
         # 随机
-        elif self.first == game_enum.skill_first.rand:
+        elif self.first == game_enum.skill.rand:
             rand_arr = list(range(0, len(actor_arr)))
             for idx in range(0, max_num):
                 rand = random.randrange(len(rand_arr))
                 ret_arr.append(actor_arr[rand_arr[rand]])
                 del rand_arr[rand]
         # 生命高
-        elif self.first == game_enum.skill_first.rand:
+        elif self.first == game_enum.skill.rand:
             actor_arr.sort(self.sort_hp, reverse=True)
             ret_arr = actor_arr[0:max_num]
         # 生命低
-        elif self.first == game_enum.skill_first.rand:
+        elif self.first == game_enum.skill.rand:
             actor_arr.sort(self.sort_hp, reverse=False)
             ret_arr = actor_arr[0:max_num]
         # 攻击高
-        elif self.first == game_enum.skill_first.rand:
+        elif self.first == game_enum.skill.rand:
             actor_arr.sort(self.sort_attack, reverse=False)
             ret_arr = actor_arr[0:max_num]
         # 攻击速度高
-        elif self.first == game_enum.skill_first.rand:
+        elif self.first == game_enum.skill.rand:
             actor_arr.sort(self.sort_speed, reverse=False)
             ret_arr = actor_arr[0:max_num]
         # 最远
-        elif self.first == game_enum.skill_first.rand:
+        elif self.first == game_enum.skill.rand:
             # 计算每一个的距离
             value_arr = []
             for tmp_actor in actor_arr:
@@ -200,9 +204,44 @@ class Skill():
                 tmp_arr.append(actor_arr[actor_arr_idx])
             ret_arr = tmp_arr[len(tmp_arr) - max_num:]
         # 全体
-        elif self.first == game_enum.skill_first.rand:
+        elif self.first == game_enum.skill.rand:
             ret_arr = actor_arr
         return ret_arr
+
+# 范围
+class Range_size():
+    x = 0   # x 
+    y = 0   # y
+    w = 0   # 宽度
+    h = 0   # 长度
+
+    # 设置尺寸数据
+    # size : x|y|w|h 
+    def set_size(self, size):
+        size_arr = size.split("|")
+        self.x = size_arr[0]
+        self.y = size_arr[1]
+        self.w = size_arr[2]
+        self.h = size_arr[3]
+
+# 技能范围
+# 保存当前技能影响的角色，或者范围
+# update : 更新影响范围
+class Skill_range():
+    m_type = ""     # 影响的类型
+    actor_arr = []  # 影响的玩家数组
+    m_range = Range_size()  # 影响的范围
+
+    # 更新影响范围
+    # skill : 使用的技能
+    # actor_arr : 影响的玩家数组
+    def update(self, skill, actor_arr):
+        self.actor_arr = actor_arr
+        # 根据技能范围类型作区分
+        if skill.range_type == game_enum.skill.actor_num:
+            return
+        elif skill.range_type == game_enum.skill.actor_range:
+            self.m_range.set_size(skill.range)
 
 # 目标
 class Target():
@@ -213,7 +252,6 @@ class Target():
     # 目标位置
     x = 0
     y = 0
-
 
 # 角色
 # init_battle_attr : 初始化战斗属性
@@ -266,6 +304,8 @@ class Actor():
         self.now_skill = 0
         # 要攻击的目标
         self.target = Target()
+        # 技能影响的范围
+        self.skill_range = Skill_range()
 
         # 数据处理
         # 技能解析
