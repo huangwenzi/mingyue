@@ -32,7 +32,9 @@ class BattleMgr():
         for idx in range(0, len(actro_arr)):
             tmp_id = actro_arr[idx]["id"]
             tmp_lv = actro_arr[idx]["lv"]
-            self.myself_actor.append(Actor(tmp_id, tmp_lv))
+            tmp_actor = Actor(tmp_id, tmp_lv)
+            tmp_actor.camp = game_enum.actor.team
+            self.myself_actor.append(tmp_actor)
 
     # 设置敌人
     # enemy_arr : 敌人数据数组
@@ -43,7 +45,9 @@ class BattleMgr():
         for idx in range(0, len(enemy_arr)):
             tmp_id = enemy_arr[idx]["id"]
             tmp_lv = enemy_arr[idx]["lv"]
-            self.match_actor.append(Actor(tmp_id, tmp_lv))
+            tmp_actor = Actor(tmp_id, tmp_lv)
+            tmp_actor.camp = game_enum.actor.enemy
+            self.match_actor.append(tmp_actor)
 
     # 获取最近的敌对角色
     # actor : 对应角色
@@ -74,6 +78,8 @@ class BattleMgr():
                     target = tmp_target
                     z_pow = x_pow + y_pow
 
+        if target == None:
+            return null
         ret_target = Target()
         ret_target.camp = target.camp
         ret_target.id = target.id
@@ -104,6 +110,9 @@ class BattleMgr():
     # 对目标进行攻击
     # actor : 对应角色
     def actor_attack(self, actor):
+        # 死人不能攻击
+        if actor.state == game_enum.actor.die:
+            return
         # 如果没有在攻击状态,设置攻击状态,设置使用的技能
         if actor.state != game_enum.actor.attack:
             actor.set_actor_state(game_enum.actor.attack)
@@ -133,6 +142,8 @@ class BattleMgr():
         now = time.time()
         for tmp_actor in actor_arr:
             # 是否在行动时间,并且角色未死亡
+            if tmp_actor.state == game_enum.actor.die:
+                return
             if tmp_actor.state != game_enum.actor.die and tmp_actor.next_time < now:
                 # 如果没有进行攻击，寻找最近的目标
                 if tmp_actor.state == game_enum.actor.stand:
@@ -153,6 +164,7 @@ class BattleMgr():
     def battle_reckon(self):
         self.actor_battle_reckon(self.myself_actor)
         self.actor_battle_reckon(self.match_actor)
+        # 检查战斗是否结束
 
     # 为角色随机技能
     # actor : 对应角色
@@ -225,21 +237,22 @@ class BattleMgr():
     def skill_reckon(self, actor):
         # 查找对应的技能
         skill_id = actor.now_skill
-        tmp_skill = None
+        now_skill = None
         for tmp_skill in actor.skill:
             if tmp_skill.id == skill_id:
-                tmp_skill = tmp_skill
+                now_skill = tmp_skill
+                break
         
         # 伤害型(直接造成伤害)
-        if tmp_skill.m_type == game_enum.skill.hurt:
+        if now_skill.m_type == game_enum.skill.hurt:
             # 获取存活的作用目标
-            acotr_arr = self.get_survival_actor(actor, tmp_skill.target)
+            acotr_arr = self.get_survival_actor(actor, now_skill.target)
             # 计算伤害
-            hurt_vlaue = tmp_skill.reckon_num(actor)
+            hurt_vlaue = now_skill.reckon_num(actor)
             # 获取作用目标
-            eff_actor = tmp_skill.get_eff_actor(actor, acotr_arr)
+            eff_actor = now_skill.get_eff_actor(actor, acotr_arr)
             # 添加到作用范围里
-            actor.skill_range.update(tmp_skill, eff_actor)
+            actor.skill_range.update(now_skill, eff_actor)
             # 扣除生命
             for tmp_actor in eff_actor:
                 tmp_actor.add_hp(-hurt_vlaue)

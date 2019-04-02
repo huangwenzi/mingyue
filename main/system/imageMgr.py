@@ -39,6 +39,8 @@ class ImageMgr():
         self.height = self.normal_background.get_height()  # 图像高度
         self.image = pygame.display.set_mode((self.width, 600))    # 设置窗体
         # self.image = pygame.display.set_mode((1, 1))    # 设置窗体
+        # print(pygame.font.get_fonts())    # 打印可以用的字体
+        pygame.font.init()
         self.font = pygame.font.SysFont(configMgr.game["font"], configMgr.game["font_size"])    # 设置字体
         self.font_color = configMgr.game["font_color"]      # 字体颜色
         self.bar_color = (0, 100, 0)        # 血条颜色
@@ -121,7 +123,7 @@ class ImageMgr():
         for tmp_actor in actor_arr:
             # 加载站立图像资源
             id_str = "actor_" + str(tmp_actor.id)
-            action_str = "i_stand_0"
+            action_str = tmp_actor.camp + "_stand_0"
             actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
             image_name = id_str + "_" + action_str
             tmp_image = Image(self, actor_path_str,
@@ -130,7 +132,7 @@ class ImageMgr():
             # 加载攻击图像资源
             id_str = "actor_" + str(tmp_actor.id)
             for idx in range(0, 2):
-                action_str = "i_attack_" + str(idx)
+                action_str = tmp_actor.camp + "_attack_" + str(idx)
                 actor_path_str = actor_path + "/" + id_str + "/" + action_str + ".png"
                 image_name = id_str + "_" + action_str
                 tmp_image = Image(self, actor_path_str,
@@ -218,6 +220,9 @@ class ImageMgr():
     # actor_arr : 要绘制的角色数组
     def blit_acotr_arr(self, actor_arr):
         for tmp_actor in actor_arr:
+            # 已经死亡的不绘制
+            if tmp_actor.state == game_enum.actor.die:
+                return
             image_name = tmp_actor.get_actor_image_name()
             # 如果是站立和移动状态，只需要绘制角色就好了(移动还没有，后面再出对应图像)
             self.image.blit(self.battle_image_dict[image_name].image, (tmp_actor.x, tmp_actor.y))
@@ -225,7 +230,8 @@ class ImageMgr():
             if tmp_actor.state == game_enum.actor.attack and tmp_actor.state_idx == tmp_actor.ATTACK_MAX_IDX:
                 self.blit_skill(tmp_actor)
             #绘制名字
-            self.image.blit(tmp_actor.name, (tmp_actor.x - 50, tmp_actor.y - 115))
+            name = self.font.render(tmp_actor.name,1,self.font_color)
+            self.image.blit(name, (tmp_actor.x - 50, tmp_actor.y - 115))
             #绘制生命框
             pygame.draw.rect(self.image, self.font_color, (tmp_actor.x - 50, tmp_actor.y - 100, 90, 16), 3)#生命条外框
             hpX = tmp_actor.battle_attr.hp/tmp_actor.now_attr.hp    #计算生命值长度

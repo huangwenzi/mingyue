@@ -8,6 +8,16 @@ import random
 from enums.game_enum import game_enum
 from system.configMgr import configMgr
 
+# 排序函数汇总
+# hp
+def sort_hp(elem):
+    return elem.battle_attr.hp
+# attack
+def sort_attack(elem):
+    return elem.battle_attr.attack
+# speed
+def sort_speed(elem):
+    return elem.battle_attr.speed
 
 # 属性
 class Attr():
@@ -129,17 +139,6 @@ class Skill():
         ret_attr.attack_range = actor.init_attr.attack_range  * self.multiple.attack_range
         return ret_attr
 
-    # 排序函数汇总
-    # hp
-    def sort_hp(self, elem):
-        return elem.battle_attr.hp
-    # attack
-    def sort_attack(self, elem):
-        return elem.battle_attr.attack
-    # speed
-    def sort_speed(self, elem):
-        return elem.battle_attr.speed
-
     # 获取作用目标
     # actor : 对应角色
     def get_eff_actor(self, actor, actor_arr):
@@ -159,7 +158,7 @@ class Skill():
             # 拷贝一份，后面找索引
             tmp_arr = copy.deepcopy(value_arr)
             value_arr.sort()
-            sort_arr = []    # 这个用来装拍完序的角色
+            sort_arr = []    # 这个用来装排完序的角色
             for idx in range(0, len(value_arr)):
                 now_value = value_arr[idx]
                 actor_arr_idx = tmp_arr.index(now_value)
@@ -173,23 +172,56 @@ class Skill():
                 ret_arr.append(actor_arr[rand_arr[rand]])
                 del rand_arr[rand]
         # 生命高
-        elif self.first == game_enum.skill.rand:
-            actor_arr.sort(self.sort_hp, reverse=True)
-            ret_arr = actor_arr[0:max_num]
+        elif self.first == game_enum.skill.hp_high:
+            # 获取每一个的生命
+            value_arr = []
+            for tmp_actor in actor_arr:
+                value_arr.append(tmp_actor.battle_attr.hp)
+            # 拷贝一份，后面找索引
+            tmp_arr = copy.deepcopy(value_arr)
+            value_arr.sort(reverse=True)
+            sort_arr = []    # 这个用来装排完序的角色
+            for idx in range(0, len(value_arr)):
+                now_value = value_arr[idx]
+                actor_arr_idx = tmp_arr.index(now_value)
+                sort_arr.append(actor_arr[actor_arr_idx])
+            ret_arr = sort_arr[0:max_num]
         # 生命低
-        elif self.first == game_enum.skill.rand:
-            actor_arr.sort(self.sort_hp, reverse=False)
-            ret_arr = actor_arr[0:max_num]
+        elif self.first == game_enum.skill.hp_low:
+            # 获取每一个的生命
+            value_arr = []
+            for tmp_actor in actor_arr:
+                value_arr.append(tmp_actor.battle_attr.hp)
+            # 拷贝一份，后面找索引
+            tmp_arr = copy.deepcopy(value_arr)
+            value_arr.sort(reverse=False)
+            sort_arr = []    # 这个用来装排完序的角色
+            for idx in range(0, len(value_arr)):
+                now_value = value_arr[idx]
+                actor_arr_idx = tmp_arr.index(now_value)
+                sort_arr.append(actor_arr[actor_arr_idx])
+            ret_arr = sort_arr[0:max_num]
         # 攻击高
-        elif self.first == game_enum.skill.rand:
-            actor_arr.sort(self.sort_attack, reverse=False)
-            ret_arr = actor_arr[0:max_num]
+        elif self.first == game_enum.skill.attack_high:
+            # 获取每一个的攻击
+            value_arr = []
+            for tmp_actor in actor_arr:
+                value_arr.append(tmp_actor.battle_attr.attack)
+            # 拷贝一份，后面找索引
+            tmp_arr = copy.deepcopy(value_arr)
+            value_arr.sort(reverse=True)
+            sort_arr = []    # 这个用来装排完序的角色
+            for idx in range(0, len(value_arr)):
+                now_value = value_arr[idx]
+                actor_arr_idx = tmp_arr.index(now_value)
+                sort_arr.append(actor_arr[actor_arr_idx])
+            ret_arr = sort_arr[0:max_num]
         # 攻击速度高
-        elif self.first == game_enum.skill.rand:
+        elif self.first == game_enum.skill.speed_high:
             actor_arr.sort(self.sort_speed, reverse=False)
             ret_arr = actor_arr[0:max_num]
         # 最远
-        elif self.first == game_enum.skill.rand:
+        elif self.first == game_enum.skill.back:
             # 计算每一个的距离
             value_arr = []
             for tmp_actor in actor_arr:
@@ -204,7 +236,7 @@ class Skill():
                 tmp_arr.append(actor_arr[actor_arr_idx])
             ret_arr = tmp_arr[len(tmp_arr) - max_num:]
         # 全体
-        elif self.first == game_enum.skill.rand:
+        elif self.first == game_enum.skill.whole:
             ret_arr = actor_arr
         return ret_arr
 
@@ -261,7 +293,7 @@ class Target():
 # two_pos_distance : 计算返回两个角色的直线距离平方
 class Actor():
     # 当前的攻击最大索引号,大于就重置
-    ATTACK_MAX_IDX = 3
+    ATTACK_MAX_IDX = 1
 
     # 初始化角色属性
     # id : 角色id

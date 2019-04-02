@@ -1,5 +1,6 @@
-import pygame
+import random
 
-photo = pygame.image.load("main\\test\\1.jpg")
-a = photo.get_size()
-pass
+actor_arr = [1,2,3,4,5]
+rand_arr = list(range(0, len(actor_arr)))
+print(rand_arr)
+del rand_arr[1]
