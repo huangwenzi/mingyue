@@ -70,6 +70,7 @@ class Buff_type(object):
 class State():
     wati = "wati"      # 待命
     battle = "battle"  # 战斗
+    over = "over"  # 战斗结束
 
 # _______________________________角色
 # 定位

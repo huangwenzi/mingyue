@@ -43,7 +43,6 @@ class ImageMgr():
         pygame.font.init()
         self.font = pygame.font.SysFont(configMgr.game["font"], configMgr.game["font_size"])    # 设置字体
         self.font_color = configMgr.game["font_color"]      # 字体颜色
-        self.bar_color = (0, 100, 0)        # 血条颜色
         self.x = 0
         self.y = 0
         self.state = game_enum.state.wati  # 当前场景状态
@@ -152,9 +151,6 @@ class ImageMgr():
     # 角色 : actor_(actor_id)_(敌我标识)_(状态标识)_(状态序列号)
     # 技能 : skill_(skill_id)
     def load_battle_image(self):
-        # 先清空旧数据(战斗结束也清一下，这里再清一遍)
-        # 清空战斗图像资源
-        self.battle_image_dict = {}
         self.load_actor_image(self.battleMgr.myself_actor)
         self.load_actor_image(self.battleMgr.match_actor)
     
@@ -198,6 +194,8 @@ class ImageMgr():
         if self.state != game_enum.state.battle:
             return
         self.battleMgr.battle_reckon()
+        if self.battleMgr.state == game_enum.state.over:
+            self.state = game_enum.state.wati
 
     # 绘制角色的技能
     # actor : 对应的角色
@@ -235,7 +233,7 @@ class ImageMgr():
             #绘制生命框
             pygame.draw.rect(self.image, self.font_color, (tmp_actor.x - 50, tmp_actor.y - 100, 90, 16), 3)#生命条外框
             hpX = tmp_actor.battle_attr.hp/tmp_actor.now_attr.hp    #计算生命值长度
-            pygame.draw.rect(self.image, self.bar_color, (tmp_actor.x - 47, tmp_actor.y - 97, hpX * 84, 10), )#剩余生命值
+            pygame.draw.rect(self.image, (0, 100, 0), (tmp_actor.x - 47, tmp_actor.y - 97, hpX * 84, 10), )#剩余生命值
             hp_number = self.font.render('%.1f' % (tmp_actor.battle_attr.hp), True, self.font_color)  # 生命值数值
             self.image.blit(hp_number, (tmp_actor.x - 30, tmp_actor.y - 100))
 
@@ -249,14 +247,17 @@ class ImageMgr():
         print("fight_callback")
         # 设置战斗状态
         self.state = game_enum.state.battle
-        # 设置战斗对手
-        enemy_arr = [{"id": 4, "lv": 10}, {"id": 5, "lv": 10},
-                     {"id": 6, "lv": 10}, {"id": 7, "lv": 10}]
-        self.battleMgr.set_enemy(enemy_arr)
+        # 战前旧数据清除
+        self.battleMgr.match_actor = []
+        self.battle_image_dict = {}
 
+        # 战前数据设置
+        # 设置战斗对手
+        enemy_arr = [{"id": 4, "lv": 15}, {"id": 5, "lv": 15},
+                     {"id": 6, "lv": 15}, {"id": 7, "lv": 15}]
+        self.battleMgr.set_enemy(enemy_arr)
         # 加载战斗中可能需要的图像资源
         self.load_battle_image()
-
         # 初始化角色起始位置和状态
         self.battle_scene_init()
 

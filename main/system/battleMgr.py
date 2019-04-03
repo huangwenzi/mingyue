@@ -26,6 +26,8 @@ class BattleMgr():
         player_data = configMgr.player
         self.myself_actor = []      # 自己的角色
         self.match_actor = []       # 对手的角色
+        # 战斗状态
+        self.state = game_enum.state.wati
 
         # 载入角色
         actro_arr = player_data["actor"]
@@ -79,7 +81,7 @@ class BattleMgr():
                     z_pow = x_pow + y_pow
 
         if target == None:
-            return null
+            return None
         ret_target = Target()
         ret_target.camp = target.camp
         ret_target.id = target.id
@@ -143,7 +145,7 @@ class BattleMgr():
         for tmp_actor in actor_arr:
             # 是否在行动时间,并且角色未死亡
             if tmp_actor.state == game_enum.actor.die:
-                return
+                continue
             if tmp_actor.state != game_enum.actor.die and tmp_actor.next_time < now:
                 # 如果没有进行攻击，寻找最近的目标
                 if tmp_actor.state == game_enum.actor.stand:
@@ -165,6 +167,19 @@ class BattleMgr():
         self.actor_battle_reckon(self.myself_actor)
         self.actor_battle_reckon(self.match_actor)
         # 检查战斗是否结束
+        i_fail = True
+        d_fail = True
+        for tmp_actor in self.myself_actor:
+            if tmp_actor.state != game_enum.actor.die:
+                i_fail = False
+                break
+        for tmp_actor in self.match_actor:
+            if tmp_actor.state != game_enum.actor.die:
+                d_fail = False
+                break 
+        if i_fail == True or d_fail == True:
+            self.state = game_enum.state.over
+
 
     # 为角色随机技能
     # actor : 对应角色
